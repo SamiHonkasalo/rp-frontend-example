@@ -1,12 +1,19 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
 import Layout from './layout/Layout';
+import CustomTheme from './layout/CustomTheme';
 
 function App() {
+  const [themeMode, setThemeMode] = useState(false);
+
+  const handleThemeSwitch = () => setThemeMode((prevMode) => !prevMode);
   return (
-    <div className="App">
-      <Layout />
-    </div>
+    <>
+      <CustomTheme themeMode={themeMode}>
+        <div className="App">
+          <Layout handleThemeSwitch={handleThemeSwitch} />
+        </div>
+      </CustomTheme>
+    </>
   );
 }
 
