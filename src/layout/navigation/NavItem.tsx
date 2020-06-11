@@ -4,12 +4,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   link: {
     color: theme.palette.text.secondary,
+    textDecoration: 'none',
+    display: 'block',
   },
   active: {
+    borderLeft: `3px solid ${theme.palette.secondary.main}`,
     color: theme.palette.secondary.main,
     fontWeight: theme.typography.fontWeightBold,
   },
@@ -30,21 +34,22 @@ interface Props {
 const NavItem = ({ to, primaryText, icon }: Props) => {
   const classes = useStyles();
   return (
-    <NavLink
-      to={to}
-      exact
-      activeClassName={classes.active}
-      className={classes.link}
-      style={{ textDecoration: 'none' }}
-    >
-      <ListItem button>
-        <ListItemIcon classes={{ root: classes.icon }}>{icon}</ListItemIcon>
-        <ListItemText
-          classes={{ primary: classes.itemText }}
-          primary={primaryText}
-        />
-      </ListItem>
-    </NavLink>
+    <Tooltip title={primaryText}>
+      <NavLink
+        to={to}
+        exact
+        activeClassName={classes.active}
+        className={classes.link}
+      >
+        <ListItem button>
+          <ListItemIcon classes={{ root: classes.icon }}>{icon}</ListItemIcon>
+          <ListItemText
+            classes={{ primary: classes.itemText }}
+            primary={primaryText}
+          />
+        </ListItem>
+      </NavLink>
+    </Tooltip>
   );
 };
 

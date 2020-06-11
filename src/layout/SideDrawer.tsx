@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       width: theme.spacing(9),
     },
   },
+  list: {
+    padding: 0,
+  },
 }));
 
 interface Props {
@@ -62,11 +65,10 @@ const SideDrawer = ({ open, handleDrawerClose }: Props) => {
         </Typography>
       </div>
       <Divider />
-      <List>
+      <List className={classes.list}>
         <NavList />
       </List>
       <Divider />
-      <List>{[]}</List>
     </Drawer>
   );
 };
