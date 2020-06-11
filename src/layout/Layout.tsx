@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Switch, Route } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
@@ -86,8 +87,38 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
                 <Grid item xs={12} md={4} lg={3}>
                   <Paper className={fixedHeightPaper}>Other things</Paper>
                 </Grid>
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>More things</Paper>
+                <Grid item xs={12} spacing={3}>
+                  <Paper className={classes.paper}>
+                    More things
+                    <Grid container xs={12} spacing={3}>
+                      <Grid item xs={4}>
+                        <Button variant="contained">contained</Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="contained" color="primary">
+                          contained primary
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="contained" color="secondary">
+                          contained secondary
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="outlined">outlined</Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="outlined" color="primary">
+                          outlined primary
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="outlined" color="secondary">
+                          outlined secondary
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Paper>
                 </Grid>
               </Grid>
               <Box pt={4}>And even more...</Box>

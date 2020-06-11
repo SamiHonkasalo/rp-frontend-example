@@ -66,6 +66,7 @@ const AppBar = ({
   return (
     <MuiAppBar
       position="absolute"
+      color="primary"
       className={clsx(classes.appBar, open && !isSmall && classes.appBarShift)}
     >
       <Toolbar className={classes.toolbar}>
