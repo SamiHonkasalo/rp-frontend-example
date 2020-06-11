@@ -4,16 +4,15 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Typography from '@material-ui/core/Typography';
 import NavList from './navigation/NavList';
 
 const useStyles = makeStyles((theme: Theme) => ({
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -46,12 +45,10 @@ interface Props {
 
 const SideDrawer = ({ open, handleDrawerClose }: Props) => {
   const classes = useStyles();
-  const isXSmall = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down('sm')
-  );
+  const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   return (
     <Drawer
-      variant={isXSmall ? 'temporary' : 'permanent'}
+      variant={isSmall ? 'temporary' : 'permanent'}
       classes={{
         paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
       }}
@@ -59,9 +56,9 @@ const SideDrawer = ({ open, handleDrawerClose }: Props) => {
       onClose={handleDrawerClose}
     >
       <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
+        <Typography component="h1" variant="h6" color="inherit" noWrap>
+          LOGO
+        </Typography>
       </div>
       <Divider />
       <List>

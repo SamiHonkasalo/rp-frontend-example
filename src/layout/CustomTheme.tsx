@@ -7,12 +7,14 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
     sideDrawer: {
       width: React.CSSProperties['width'];
+      closedWidth: React.CSSProperties['width'];
     };
   }
   // allow configuration using `createMuiTheme`
   interface ThemeOptions {
     sideDrawer?: {
       width?: React.CSSProperties['width'];
+      closedWidth?: React.CSSProperties['width'];
     };
   }
 }
@@ -27,20 +29,15 @@ const CustomTheme = ({ themeMode, children }: Props) => {
     return createMuiTheme({
       sideDrawer: {
         width: 240,
+        closedWidth: 72,
       },
       palette: {
         type: themeMode ? 'dark' : 'light',
         primary: {
-          light: '#4c8c4a',
-          main: '#1b5e20',
-          dark: '#003300',
-          contrastText: '#fff',
+          main: '#00796b',
         },
         secondary: {
-          light: '#6d6d6d',
-          main: '#424242',
-          dark: '#1b1b1b',
-          contrastText: '#fff',
+          main: '#e65100',
         },
       },
     });

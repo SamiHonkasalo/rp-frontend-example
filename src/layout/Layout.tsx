@@ -56,6 +56,7 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
         themeMode={themeMode}
         open={open}
         handleDrawerOpen={handleDrawerOpen}
+        handleDrawerClose={handleDrawerClose}
         handleThemeSwitch={handleThemeSwitch}
       />
       <SideDrawer open={open} handleDrawerClose={handleDrawerClose} />

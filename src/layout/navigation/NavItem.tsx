@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   active: {
-    // color: theme.palette.text.primary,
-    color: theme.palette.primary.light,
+    color: theme.palette.secondary.main,
     fontWeight: theme.typography.fontWeightBold,
   },
   itemText: {
