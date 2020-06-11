@@ -45,7 +45,6 @@ const CustomTheme = ({ themeMode, children }: Props) => {
       },
     });
   }, [themeMode]);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

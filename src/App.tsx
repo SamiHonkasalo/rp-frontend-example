@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './layout/Layout';
 import CustomTheme from './layout/CustomTheme';
 
@@ -9,9 +10,14 @@ function App() {
   return (
     <>
       <CustomTheme themeMode={themeMode}>
-        <div className="App">
-          <Layout handleThemeSwitch={handleThemeSwitch} />
-        </div>
+        <Router>
+          <div className="App">
+            <Layout
+              themeMode={themeMode}
+              handleThemeSwitch={handleThemeSwitch}
+            />
+          </div>
+        </Router>
       </CustomTheme>
     </>
   );
