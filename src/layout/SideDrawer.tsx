@@ -46,6 +46,7 @@ interface Props {
 const SideDrawer = ({ open, handleDrawerClose }: Props) => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
   return (
     <Drawer
       variant={isSmall ? 'temporary' : 'permanent'}

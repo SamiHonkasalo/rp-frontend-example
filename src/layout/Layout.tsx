@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Switch, Route } from 'react-router-dom';
+
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
 
@@ -49,6 +51,18 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const isMedium = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('md')
+  );
+
+  // Autohide sidedrawer when medium or smaller
+  useEffect(() => {
+    if (isMedium) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
+  }, [isMedium]);
 
   return (
     <div className={classes.root}>
