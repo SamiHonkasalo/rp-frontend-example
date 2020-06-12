@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Switch, Route } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
@@ -98,6 +100,9 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
                         <Button variant="contained" color="primary">
                           contained primary
                         </Button>
+                        <Fab color="primary" aria-label="add">
+                          <AddIcon />
+                        </Fab>
                       </Grid>
                       <Grid item xs={4}>
                         <Button variant="contained" color="secondary">
