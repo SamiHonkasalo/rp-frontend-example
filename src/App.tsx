@@ -1,23 +1,25 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Layout from './layout/Layout';
+import CustomTheme from './layout/CustomTheme';
 
 function App() {
+  const [themeMode, setThemeMode] = useState(false);
+
+  const handleThemeSwitch = () => setThemeMode((prevMode) => !prevMode);
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CustomTheme themeMode={themeMode}>
+        <Router>
+          <div className="App">
+            <Layout
+              themeMode={themeMode}
+              handleThemeSwitch={handleThemeSwitch}
+            />
+          </div>
+        </Router>
+      </CustomTheme>
+    </>
   );
 }
 
