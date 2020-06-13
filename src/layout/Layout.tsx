@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -13,6 +13,8 @@ import AddIcon from '@material-ui/icons/Add';
 
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
+import { UIContext } from '../store/ui/uiContext';
+import { UITypes } from '../store/ui/uiReducer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -39,44 +41,34 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Props {
-  themeMode: boolean;
-  handleThemeSwitch: () => void;
-}
-
-const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
+const Layout = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const isMedium = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('md')
   );
+  const { dispatch } = useContext(UIContext);
+
+  const handleDrawerOpen = useCallback(() => {
+    dispatch({ type: UITypes.OPEN_SIDEDRAWER });
+  }, [dispatch]);
+  const handleDrawerClose = useCallback(() => {
+    dispatch({ type: UITypes.CLOSE_SIDEDRAWER });
+  }, [dispatch]);
 
   // Autohide sidedrawer when medium or smaller
   useEffect(() => {
     if (isMedium) {
-      setOpen(false);
+      handleDrawerClose();
     } else {
-      setOpen(true);
+      handleDrawerOpen();
     }
-  }, [isMedium]);
+  }, [isMedium, handleDrawerClose, handleDrawerOpen]);
 
   return (
     <div className={classes.root}>
-      <AppBar
-        themeMode={themeMode}
-        open={open}
-        handleDrawerOpen={handleDrawerOpen}
-        handleDrawerClose={handleDrawerClose}
-        handleThemeSwitch={handleThemeSwitch}
-      />
-      <SideDrawer open={open} handleDrawerClose={handleDrawerClose} />
+      <AppBar />
+      <SideDrawer />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Switch>
@@ -89,10 +81,10 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
                 <Grid item xs={12} md={4} lg={3}>
                   <Paper className={fixedHeightPaper}>Other things</Paper>
                 </Grid>
-                <Grid item xs={12} spacing={3}>
+                <Grid item xs={12}>
                   <Paper className={classes.paper}>
                     More things
-                    <Grid container xs={12} spacing={3}>
+                    <Grid container spacing={3}>
                       <Grid item xs={4}>
                         <Button variant="contained">contained</Button>
                       </Grid>

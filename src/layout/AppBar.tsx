@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import MuiAppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
@@ -10,6 +10,9 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import IconButton from '@material-ui/core/IconButton';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import { UIContext } from '../store/ui/uiContext';
+import { UITypes } from '../store/ui/uiReducer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   toolbar: {
@@ -45,37 +48,44 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Props {
-  open: boolean;
-  themeMode: boolean;
-  handleDrawerOpen: () => void;
-  handleDrawerClose: () => void;
-  handleThemeSwitch: () => void;
-}
-
-const AppBar = ({
-  open,
-  handleDrawerOpen,
-  handleDrawerClose,
-  handleThemeSwitch,
-  themeMode,
-}: Props) => {
+const AppBar = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const { state, dispatch } = useContext(UIContext);
+
+  const { themeMode } = state;
+
+  const handleThemeSwitch = () => {
+    if (themeMode) {
+      dispatch({
+        type: UITypes.SET_LIGHT_THEME,
+      });
+    } else {
+      dispatch({
+        type: UITypes.SET_DARK_THEME,
+      });
+    }
+  };
 
   return (
     <MuiAppBar
       position="absolute"
       color="primary"
-      className={clsx(classes.appBar, open && !isSmall && classes.appBarShift)}
+      className={clsx(
+        classes.appBar,
+        state.sideDrawerOpen && !isSmall && classes.appBarShift
+      )}
     >
       <Toolbar className={classes.toolbar}>
         <IconButton
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          onClick={() => dispatch({ type: UITypes.OPEN_SIDEDRAWER })}
+          className={clsx(
+            classes.menuButton,
+            state.sideDrawerOpen && classes.menuButtonHidden
+          )}
         >
           <MenuIcon />
         </IconButton>
@@ -83,10 +93,10 @@ const AppBar = ({
           edge="start"
           color="inherit"
           aria-label="close drawer"
-          onClick={handleDrawerClose}
+          onClick={() => dispatch({ type: UITypes.CLOSE_SIDEDRAWER })}
           className={clsx(
             classes.menuButton,
-            !open && classes.menuButtonHidden
+            !state.sideDrawerOpen && classes.menuButtonHidden
           )}
         >
           <ChevronLeftIcon />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -6,7 +6,10 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
+
 import NavList from './navigation/NavList';
+import { UIContext } from '../store/ui/uiContext';
+import { UITypes } from '../store/ui/uiReducer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   toolbarIcon: {
@@ -41,23 +44,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Props {
-  open: boolean;
-  handleDrawerClose: () => void;
-}
-
-const SideDrawer = ({ open, handleDrawerClose }: Props) => {
+const SideDrawer = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const { state, dispatch } = useContext(UIContext);
 
   return (
     <Drawer
       variant={isSmall ? 'temporary' : 'permanent'}
       classes={{
-        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        paper: clsx(
+          classes.drawerPaper,
+          !state.sideDrawerOpen && classes.drawerPaperClose
+        ),
       }}
-      open={open}
-      onClose={handleDrawerClose}
+      open={state.sideDrawerOpen}
+      onClose={() => dispatch({ type: UITypes.CLOSE_SIDEDRAWER })}
     >
       <div className={classes.toolbarIcon}>
         <Typography component="h1" variant="h6" color="inherit" noWrap>
