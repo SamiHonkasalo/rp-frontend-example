@@ -48,15 +48,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Props {
-  themeMode: boolean;
-  handleThemeSwitch: () => void;
-}
-
-const AppBar = ({ handleThemeSwitch, themeMode }: Props) => {
+const AppBar = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { state, dispatch } = useContext(UIContext);
+
+  const { themeMode } = state;
+
+  const handleThemeSwitch = () => {
+    if (themeMode) {
+      dispatch({
+        type: UITypes.SET_LIGHT_THEME,
+      });
+    } else {
+      dispatch({
+        type: UITypes.SET_DARK_THEME,
+      });
+    }
+  };
 
   return (
     <MuiAppBar

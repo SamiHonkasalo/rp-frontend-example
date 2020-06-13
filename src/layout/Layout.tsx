@@ -41,12 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Props {
-  themeMode: boolean;
-  handleThemeSwitch: () => void;
-}
-
-const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
+const Layout = () => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const isMedium = useMediaQuery((theme: Theme) =>
@@ -72,7 +67,7 @@ const Layout = ({ themeMode, handleThemeSwitch }: Props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar themeMode={themeMode} handleThemeSwitch={handleThemeSwitch} />
+      <AppBar />
       <SideDrawer />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

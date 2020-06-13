@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Layout from './layout/Layout';
@@ -6,19 +6,13 @@ import CustomTheme from './layout/CustomTheme';
 import { UIProvider } from './store/ui/uiContext';
 
 function App() {
-  const [themeMode, setThemeMode] = useState(false);
-
-  const handleThemeSwitch = () => setThemeMode((prevMode) => !prevMode);
   return (
     <>
       <UIProvider>
-        <CustomTheme themeMode={themeMode}>
+        <CustomTheme>
           <Router>
             <div className="App">
-              <Layout
-                themeMode={themeMode}
-                handleThemeSwitch={handleThemeSwitch}
-              />
+              <Layout />
             </div>
           </Router>
         </CustomTheme>

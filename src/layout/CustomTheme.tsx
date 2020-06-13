@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/';
+
+import { UIContext } from '../store/ui/uiContext';
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
@@ -20,11 +22,13 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 }
 
 interface Props {
-  themeMode: boolean;
   children: React.ReactNode;
 }
 
-const CustomTheme = ({ themeMode, children }: Props) => {
+const CustomTheme = ({ children }: Props) => {
+  const { state } = useContext(UIContext);
+  const { themeMode } = state;
+
   const theme = useMemo(() => {
     return createMuiTheme({
       sideDrawer: {
