@@ -9,3 +9,9 @@ type ActionMap<M extends { [index: string]: any }> = {
         payload: M[Key];
       };
 };
+
+type NotificationType = {
+  message: string;
+  type?: 'info' | 'error' | 'warning';
+  hideDuration?: number;
+};

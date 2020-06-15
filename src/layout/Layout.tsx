@@ -10,11 +10,14 @@ import { Switch, Route } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
 import { UIContext } from '../store/ui/uiContext';
 import { UITypes } from '../store/ui/uiReducer';
+import Notification from '../shared/components/ui/Notification';
+import useNotification from '../utils/hooks/useNotification';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -41,13 +44,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Layout = () => {
+const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const isMedium = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('md')
   );
   const { dispatch } = useContext(UIContext);
+  const notify = useNotification();
 
   const handleDrawerOpen = useCallback(() => {
     dispatch({ type: UITypes.OPEN_SIDEDRAWER });
@@ -65,12 +69,28 @@ const Layout = () => {
     }
   }, [isMedium, handleDrawerClose, handleDrawerOpen]);
 
+  // TEST FUNCTION FOR NOTIFICATIONS
+  const handleNotificationTest = () => {
+    notify({ message: 'Test notification #1 - normal/info' });
+    notify({
+      message: 'Test notification #2 - warning',
+      type: 'warning',
+      hideDuration: 5000,
+    });
+    notify({
+      message: 'Test notification #3 - error',
+      type: 'error',
+      hideDuration: 2000,
+    });
+  };
+
   return (
     <div className={classes.root}>
       <AppBar />
       <SideDrawer />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        {/* TESTING CONTENT */}
         <Switch>
           <Route path="/" exact>
             <Container maxWidth="lg" className={classes.container}>
@@ -89,10 +109,17 @@ const Layout = () => {
                         <Button variant="contained">contained</Button>
                       </Grid>
                       <Grid item xs={4}>
+                        <Fab color="secondary" aria-label="remove">
+                          <RemoveIcon />
+                        </Fab>
                         <Button variant="contained" color="primary">
                           contained primary
                         </Button>
-                        <Fab color="primary" aria-label="add">
+                        <Fab
+                          color="primary"
+                          aria-label="add"
+                          onClick={handleNotificationTest}
+                        >
                           <AddIcon />
                         </Fab>
                       </Grid>
@@ -131,7 +158,10 @@ const Layout = () => {
             </Container>
           </Route>
         </Switch>
+        {/* TESTING CONTENT */}
+        {children}
       </main>
+      <Notification />
     </div>
   );
 };

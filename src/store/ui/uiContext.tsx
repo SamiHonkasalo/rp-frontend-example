@@ -4,6 +4,7 @@ import uiReducer, { UIState, UIActions } from './uiReducer';
 const initialState: UIState = {
   sideDrawerOpen: true,
   themeMode: false,
+  notifications: [] as NotificationType[],
 };
 
 const UIContext = createContext<{

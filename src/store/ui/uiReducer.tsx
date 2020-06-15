@@ -3,6 +3,8 @@ export enum UITypes {
   CLOSE_SIDEDRAWER = 'CLOSE_SIDEDRAWER',
   SET_DARK_THEME = 'SET_DARK_THEME',
   SET_LIGHT_THEME = 'SET_LIGHT_THEME',
+  ADD_NOTIFICATION = 'ADD_NOTIFICATION',
+  HIDE_NOTIFICATION = 'HIDE_NOTIFICATION',
 }
 
 type UIPayload = {
@@ -10,6 +12,8 @@ type UIPayload = {
   [UITypes.CLOSE_SIDEDRAWER]: undefined;
   [UITypes.SET_DARK_THEME]: undefined;
   [UITypes.SET_LIGHT_THEME]: undefined;
+  [UITypes.ADD_NOTIFICATION]: NotificationType;
+  [UITypes.HIDE_NOTIFICATION]: undefined;
 };
 
 export type UIActions = ActionMap<UIPayload>[keyof ActionMap<UIPayload>];
@@ -17,6 +21,7 @@ export type UIActions = ActionMap<UIPayload>[keyof ActionMap<UIPayload>];
 export type UIState = {
   sideDrawerOpen: boolean;
   themeMode: boolean;
+  notifications: NotificationType[];
 };
 
 const uiReducer = (state: UIState, action: UIActions) => {
@@ -41,6 +46,22 @@ const uiReducer = (state: UIState, action: UIActions) => {
         ...state,
         themeMode: false,
       };
+    case UITypes.ADD_NOTIFICATION: {
+      const curNotifs = [...state.notifications];
+      curNotifs.push(action.payload);
+      return {
+        ...state,
+        notifications: curNotifs,
+      };
+    }
+    case UITypes.HIDE_NOTIFICATION: {
+      const curNotifs = [...state.notifications];
+      curNotifs.shift();
+      return {
+        ...state,
+        notifications: curNotifs,
+      };
+    }
 
     default:
       return state;
