@@ -4,7 +4,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import NavItem from './NavItem';
 
-const NavList = () => {
+const NavList: React.FC = () => {
   return (
     <>
       <NavItem to="/" icon={<DashboardIcon />} primaryText="Dashboard" />

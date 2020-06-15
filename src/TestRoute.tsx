@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TestRoute = () => {
+const TestRoute: React.FC = () => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const notify = useNotification();

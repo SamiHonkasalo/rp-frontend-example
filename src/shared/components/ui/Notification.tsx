@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   info: {},
 }));
 
-const Notification = () => {
+const Notification: React.FC = () => {
   const { state, dispatch } = useContext(UIContext);
   const [open, setOpen] = useState(true);
   const classes = useStyles();
