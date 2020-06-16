@@ -64,7 +64,7 @@ const Layout: React.FC = ({ children }) => {
       <main className={classes.main}>
         <div className={classes.appBarSpacer} />
         <div className={classes.content}>
-          <Container maxWidth="xl" className={classes.container}>
+          <Container maxWidth={false} className={classes.container}>
             {children}
           </Container>
         </div>
