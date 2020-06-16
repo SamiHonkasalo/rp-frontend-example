@@ -8,12 +8,12 @@ const initialState: UIState = {
   notifications: [] as NotificationType[],
 };
 
-interface UIContext {
+interface UIContextInterface {
   state: UIState;
   dispatch: Dispatch<UIActions>;
 }
 
-const UIContext = createContext<UIContext>({
+const UIContext = createContext<UIContextInterface>({
   state: initialState,
   dispatch: () => null,
 });
