@@ -7,10 +7,12 @@ const initialState: UIState = {
   notifications: [] as NotificationType[],
 };
 
-const UIContext = createContext<{
+interface UIContext {
   state: UIState;
   dispatch: Dispatch<UIActions>;
-}>({
+}
+
+const UIContext = createContext<UIContext>({
   state: initialState,
   dispatch: () => null,
 });
