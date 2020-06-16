@@ -29,11 +29,11 @@ const Map: React.FC<Props> = ({ center, zoom }: Props) => {
 
   // Resize the map when sidedrawer state changes and it's not temporary
   useEffect(() => {
-    if (map && !isSmall && (sideDrawerOpen || !sideDrawerOpen)) {
+    if (map && !isSmall) {
       // Have to use a delay due to a transition delay on the sidedrawer
       setTimeout(() => {
         map.resize();
-      }, 250);
+      }, 230);
     }
   }, [map, sideDrawerOpen, isSmall]);
 
