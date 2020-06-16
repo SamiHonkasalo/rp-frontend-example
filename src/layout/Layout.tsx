@@ -23,22 +23,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     height: '100%',
+  },
+  container: {
+    height: '100%',
     overflow: 'auto',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: theme.spacing(1),
     },
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
   },
 }));
 
@@ -71,9 +63,11 @@ const Layout: React.FC = ({ children }) => {
       <SideDrawer />
       <main className={classes.main}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="xl" className={classes.content}>
-          {children}
-        </Container>
+        <div className={classes.content}>
+          <Container maxWidth="xl" className={classes.container}>
+            {children}
+          </Container>
+        </div>
       </main>
       <Notification />
     </div>
