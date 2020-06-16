@@ -24,18 +24,15 @@ const Map: React.FC<Props> = ({ center, zoom }: Props) => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-  const { sideDrawerOpen } = state;
+  const { sideDrawerTransitioned } = state;
   const { themeMode } = state;
 
-  // Resize the map when sidedrawer state changes and it's not temporary
+  // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
   useEffect(() => {
     if (map && !isSmall) {
-      // Have to use a delay due to a transition delay on the sidedrawer
-      setTimeout(() => {
-        map.resize();
-      }, 230);
+      map.resize();
     }
-  }, [map, sideDrawerOpen, isSmall]);
+  }, [map, sideDrawerTransitioned, isSmall]);
 
   // Set map to dark mode if current mode is dark
   useEffect(() => {

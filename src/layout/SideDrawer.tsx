@@ -60,6 +60,7 @@ const SideDrawer: React.FC = () => {
       }}
       open={state.sideDrawerOpen}
       onClose={() => dispatch({ type: UITypes.CLOSE_SIDEDRAWER })}
+      onTransitionEnd={() => dispatch({ type: UITypes.TOGGLE_TRANSITIONED })}
     >
       <div className={classes.toolbarIcon}>
         <Typography component="h1" variant="h6" color="inherit" noWrap>

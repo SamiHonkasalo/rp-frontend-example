@@ -3,6 +3,7 @@ import uiReducer, { UIState, UIActions } from './uiReducer';
 
 const initialState: UIState = {
   sideDrawerOpen: true,
+  sideDrawerTransitioned: true,
   themeMode: false,
   notifications: [] as NotificationType[],
 };
