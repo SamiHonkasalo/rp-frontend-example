@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useCallback } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Container from '@material-ui/core/Container';
 
 import AppBar from './AppBar';
 import SideDrawer from './SideDrawer';
@@ -22,10 +23,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     height: '100%',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    overflow: 'auto',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
+    },
   },
   paper: {
     padding: theme.spacing(2),
@@ -67,7 +71,9 @@ const Layout: React.FC = ({ children }) => {
       <SideDrawer />
       <main className={classes.main}>
         <div className={classes.appBarSpacer} />
-        <div className={classes.content}>{children}</div>
+        <Container maxWidth="xl" className={classes.content}>
+          {children}
+        </Container>
       </main>
       <Notification />
     </div>
