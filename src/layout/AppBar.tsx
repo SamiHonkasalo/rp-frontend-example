@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const AppBar = () => {
+const AppBar: React.FC = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { state, dispatch } = useContext(UIContext);

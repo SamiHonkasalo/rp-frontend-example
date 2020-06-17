@@ -31,7 +31,7 @@ interface Props {
   icon: React.ReactNode;
 }
 
-const NavItem = ({ to, primaryText, icon }: Props) => {
+const NavItem: React.FC<Props> = ({ to, primaryText, icon }: Props) => {
   const classes = useStyles();
   return (
     <Tooltip title={primaryText}>

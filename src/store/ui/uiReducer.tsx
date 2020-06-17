@@ -1,6 +1,7 @@
 export enum UITypes {
   OPEN_SIDEDRAWER = 'OPEN_SIDEDRAWER',
   CLOSE_SIDEDRAWER = 'CLOSE_SIDEDRAWER',
+  TOGGLE_TRANSITIONED = 'TOGGLE_TRANSITIONED',
   SET_DARK_THEME = 'SET_DARK_THEME',
   SET_LIGHT_THEME = 'SET_LIGHT_THEME',
   ADD_NOTIFICATION = 'ADD_NOTIFICATION',
@@ -14,12 +15,14 @@ type UIPayload = {
   [UITypes.SET_LIGHT_THEME]: undefined;
   [UITypes.ADD_NOTIFICATION]: NotificationType;
   [UITypes.HIDE_NOTIFICATION]: undefined;
+  [UITypes.TOGGLE_TRANSITIONED]: undefined;
 };
 
 export type UIActions = ActionMap<UIPayload>[keyof ActionMap<UIPayload>];
 
 export type UIState = {
   sideDrawerOpen: boolean;
+  sideDrawerTransitioned: boolean;
   themeMode: boolean;
   notifications: NotificationType[];
 };
@@ -35,6 +38,11 @@ const uiReducer = (state: UIState, action: UIActions) => {
       return {
         ...state,
         sideDrawerOpen: false,
+      };
+    case UITypes.TOGGLE_TRANSITIONED:
+      return {
+        ...state,
+        sideDrawerTransitioned: state.sideDrawerOpen,
       };
     case UITypes.SET_DARK_THEME:
       return {

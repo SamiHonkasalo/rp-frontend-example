@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const SideDrawer = () => {
+const SideDrawer: React.FC = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { state, dispatch } = useContext(UIContext);
@@ -60,6 +60,7 @@ const SideDrawer = () => {
       }}
       open={state.sideDrawerOpen}
       onClose={() => dispatch({ type: UITypes.CLOSE_SIDEDRAWER })}
+      onTransitionEnd={() => dispatch({ type: UITypes.TOGGLE_TRANSITIONED })}
     >
       <div className={classes.toolbarIcon}>
         <Typography component="h1" variant="h6" color="inherit" noWrap>
