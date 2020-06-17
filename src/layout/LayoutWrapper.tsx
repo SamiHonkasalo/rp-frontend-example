@@ -3,13 +3,19 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import CustomTheme from './CustomTheme';
 import { UIProvider } from '../store/ui/uiContext';
+import { HarvesterProvider } from '../store/harvester/harvesterContext';
+import AppData from '../AppData';
 
 const LayoutWrapper: React.FC = ({ children }) => {
   return (
     <UIProvider>
-      <CustomTheme>
-        <Router>{children}</Router>
-      </CustomTheme>
+      <HarvesterProvider>
+        <CustomTheme>
+          <AppData>
+            <Router>{children}</Router>
+          </AppData>
+        </CustomTheme>
+      </HarvesterProvider>
     </UIProvider>
   );
 };
