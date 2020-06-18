@@ -24,6 +24,50 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
 
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+  });
+
+  if (map) {
+    map.on(
+      'mouseenter',
+      'harvesters',
+      (
+        e: mapboxgl.MapMouseEvent & {
+          features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+        } & mapboxgl.EventData
+      ) => {
+        // Change the cursor style as a UI indicator.
+        map.getCanvas().style.cursor = 'pointer';
+        if (e && e.features && e.features[0] && e.features[0].geometry) {
+          const { geometry } = e.features[0];
+          const { coordinates } = (geometry as unknown) as GeoJSON.Point;
+          const { description } = e.features[0].properties as {
+            description: string;
+          };
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup
+            .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
+            .setHTML(description)
+            .addTo(map);
+        }
+      }
+    );
+    map.on('mouseleave', 'harvesters', () => {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    });
+  }
+
   // Create map on mount
   useEffect(() => {
     mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY || '';
@@ -31,59 +75,64 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
       const m = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/outdoors-v11',
+        zoom: 6,
+        center: { lat: 62.2518079, lng: 25.7671327 },
       });
       setMap(m);
     }
   }, []);
 
-  // Add all harvesters on the map
+  // Add all harvesters to the map
   useEffect(() => {
     if (map && map.loaded()) {
+      // Create a feature collection of harvesters
+      const geojsonData: mapboxgl.GeoJSONSourceOptions['data'] = {
+        type: 'FeatureCollection',
+        features: [],
+      };
       harvesters.forEach((h) => {
-        const geojsonData: mapboxgl.GeoJSONSourceOptions['data'] = {
+        geojsonData.features.push({
           type: 'Feature',
           geometry: {
             type: 'Point',
             coordinates: [h.location.lng, h.location.lat],
           },
           properties: {
-            name: h.id,
+            title: h.id,
+            description: `Harvester ${h.id}`,
+            icon: 'rocket',
           },
-        };
-
-        if (!map.getSource(h.id)) {
-          map.addSource(h.id, {
-            type: 'geojson',
-            data: geojsonData,
-          });
+        });
+      });
+      // If source and layer do not exist, add them, else update the source data
+      if (!map.getSource('harvesters')) {
+        map.addSource('harvesters', {
+          type: 'geojson',
+          data: geojsonData,
+        });
+        if (!map.getLayer('harvesters')) {
           map.addLayer({
-            id: h.id,
+            id: 'harvesters',
             type: 'symbol',
-            source: h.id,
+            source: 'harvesters',
             layout: {
-              'icon-image': 'rocket-15',
+              // get the icon name from the source's "icon" property
+              // concatenate the name to get an icon from the style's sprite sheet
+              'icon-image': ['concat', ['get', 'icon'], '-15'],
+              // get the title name from the source's "title" property
+              'text-field': ['get', 'title'],
+              'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+              'text-offset': [0, 0.6],
+              'text-anchor': 'top',
             },
           });
-          if (h.id === 'h1') {
-            map.flyTo({
-              center: h.location,
-              speed: 0.8,
-              zoom: 12,
-            });
-          }
-        } else {
-          const source: mapboxgl.GeoJSONSource = map.getSource(
-            h.id
-          ) as mapboxgl.GeoJSONSource;
-          source.setData(geojsonData);
-          if (h.id === 'h1') {
-            map.flyTo({
-              center: h.location,
-              speed: 0.5,
-            });
-          }
         }
-      });
+      } else {
+        const source: mapboxgl.GeoJSONSource = map.getSource(
+          'harvesters'
+        ) as mapboxgl.GeoJSONSource;
+        source.setData(geojsonData);
+      }
     }
   }, [harvesters, map]);
 
