@@ -234,7 +234,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     }
   }, [map, themeMode]);
 
-  return <div ref={mapContainer} className={classes.map} />;
+  return <div ref={mapContainer} className={`${classes.map} mapboxgl-map`} />;
 };
 
 export default Map;
