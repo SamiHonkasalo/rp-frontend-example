@@ -2,16 +2,17 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import mapboxgl from 'mapbox-gl';
+import * as turf from '@turf/turf';
 
 import { UIContext } from '../store/ui/uiContext';
 
 const useStyles = makeStyles(() => ({
   map: {
+    margin: 'auto',
     width: '100%',
     height: '100%',
   },
 }));
-
 interface Props {
   harvesters: HarvesterType[];
 }
@@ -21,6 +22,12 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   const { state } = useContext(UIContext);
   const mapContainer = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
+  const [oldGeoData, setOldGeoData] = useState<
+    GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
+  >({
+    type: 'FeatureCollection',
+    features: [],
+  });
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
 
@@ -79,7 +86,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
           m.getCanvas().style.cursor = 'pointer';
           if (e && e.features && e.features[0] && e.features[0].geometry) {
             const { geometry } = e.features[0];
-            const { coordinates } = (geometry as unknown) as GeoJSON.Point;
+            const { coordinates } = geometry as GeoJSON.Point;
             const { description } = e.features[0].properties as {
               description: string;
             };
@@ -108,14 +115,58 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
 
   // Update harvester data when changed
   useEffect(() => {
+    // Amount of steps to be used in the animation of the movement
+    const steps = 100;
     const geoData: GeoJSON.FeatureCollection<
-      GeoJSON.Geometry,
+      GeoJSON.Point,
       GeoJSON.GeoJsonProperties
     > = {
       type: 'FeatureCollection',
       features: [],
     };
+
+    // Create routes/lines for each harvester and animate the marker based on those lines
+    const lines = [] as turf.helpers.Feature<
+      turf.helpers.Point,
+      turf.helpers.Properties
+    >[][];
     harvesters.forEach((h) => {
+      const line = [] as turf.helpers.Feature<
+        turf.helpers.Point,
+        turf.helpers.Properties
+      >[];
+      const oldHarvData = oldGeoData.features.find(
+        (f) => f.properties?.title === h.id
+      );
+      if (oldHarvData) {
+        const { coordinates } = oldHarvData.geometry;
+        if (coordinates) {
+          // A simple line from origin to destination
+          const route: turf.FeatureCollection<turf.LineString> = {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'LineString',
+                  coordinates: [coordinates, [h.location.lng, h.location.lat]],
+                },
+              },
+            ],
+          };
+          const dist = turf.lineDistance(route.features[0], {
+            units: 'meters',
+          });
+          // Create a line between origin and target according to the step amount
+          for (let i = 0; i < dist; i += dist / steps) {
+            const segment = turf.along(route.features[0], i, {
+              units: 'meters',
+            });
+            line.push(segment);
+          }
+        }
+      }
       geoData.features.push({
         type: 'Feature',
         geometry: {
@@ -128,15 +179,43 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
           icon: 'rocket',
         },
       });
+      lines.push(line);
     });
-    if (map && map.getSource('harvesters')) {
-      const source: mapboxgl.GeoJSONSource = map.getSource(
-        'harvesters'
-      ) as mapboxgl.GeoJSONSource;
-      if (source) {
-        source.setData(geoData);
+    // Set old data to state to be used when calculating the route
+    setOldGeoData(geoData);
+
+    // Number of coordinate/animation updates
+    let counter = 0;
+    const animateMarker = () => {
+      if (map && map.getSource('harvesters')) {
+        const source: mapboxgl.GeoJSONSource = map.getSource(
+          'harvesters'
+        ) as mapboxgl.GeoJSONSource;
+        if (source) {
+          // Loop through all harvesters and update coords based on the coordinate array created by turf
+          for (let i = 0; i < harvesters.length; i += 1) {
+            if (
+              lines.length > 0 &&
+              lines[i][counter] &&
+              lines[i][counter].geometry
+            ) {
+              const newCoords = lines[i][counter].geometry?.coordinates;
+              if (newCoords) {
+                geoData.features[i].geometry.coordinates = newCoords;
+              }
+            }
+          }
+          // Set new data
+          source.setData(geoData);
+        }
       }
-    }
+      if (counter < steps) {
+        // requestAnimationFrame(animateMarker);
+      }
+      counter += 1;
+    };
+    animateMarker();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [harvesters, map]);
 
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
@@ -150,6 +229,8 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   useEffect(() => {
     if (map && themeMode) {
       map.setStyle('mapbox://styles/mapbox/dark-v10', { diff: false });
+    } else if (map && !themeMode) {
+      map.setStyle('mapbox://styles/mapbox/outdoors-v11', { diff: false });
     }
   }, [map, themeMode]);
 
