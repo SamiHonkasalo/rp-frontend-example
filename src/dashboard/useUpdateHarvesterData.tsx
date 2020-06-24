@@ -17,7 +17,7 @@ const useUpdateHarvesterData = () => {
   const updateHarvesterData = useCallback(
     ({ map, harvesters, oldGeoData, setOldDataCb }: Props) => {
       // Amount of steps to be used in the animation of the movement
-      const steps = 100;
+      const steps = 200;
       const geoData: GeoJSON.FeatureCollection<
         GeoJSON.Point,
         GeoJSON.GeoJsonProperties

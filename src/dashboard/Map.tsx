@@ -79,7 +79,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
   useEffect(() => {
     if (map && !isSmall) {
-      // map.resize();
+      map.resize();
     }
   }, [map, sideDrawerTransitioned, isSmall]);
 
