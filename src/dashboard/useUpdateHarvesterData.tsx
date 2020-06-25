@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import * as turf from '@turf/turf';
 
-interface Props {
+interface UpdateHarvesters {
   map: mapboxgl.Map;
   harvesters: HarvesterType[];
   oldGeoData: GeoJSON.FeatureCollection<
@@ -13,9 +13,14 @@ interface Props {
   ) => void;
 }
 
+interface UpdateRoutes {
+  map: mapboxgl.Map;
+  harvesters: HarvesterType[];
+}
+
 const useUpdateHarvesterData = () => {
   const updateHarvesterData = useCallback(
-    ({ map, harvesters, oldGeoData, setOldDataCb }: Props) => {
+    ({ map, harvesters, oldGeoData, setOldDataCb }: UpdateHarvesters) => {
       // Amount of steps to be used in the animation of the movement
       const steps = 200;
       const geoData: GeoJSON.FeatureCollection<
@@ -124,7 +129,44 @@ const useUpdateHarvesterData = () => {
     },
     []
   );
-  return updateHarvesterData;
+
+  const updateHarvesterRoutes = useCallback(
+    ({ map, harvesters }: UpdateRoutes) => {
+      const routeData: GeoJSON.FeatureCollection<GeoJSON.LineString> = {
+        type: 'FeatureCollection',
+        features: [],
+      };
+      // Get the routes source
+      if (map && map.getSource('routes')) {
+        const source: mapboxgl.GeoJSONSource = map.getSource(
+          'routes'
+        ) as mapboxgl.GeoJSONSource;
+        if (source) {
+          // Loop through all harvester routes and update them
+          harvesters.forEach((h) => {
+            const coords = h.route.map((r) => [r.lng, r.lat]);
+            const feature: GeoJSON.Feature<
+              GeoJSON.LineString,
+              GeoJSON.GeoJsonProperties
+            > = {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: coords,
+              },
+            };
+            routeData.features.push(feature);
+          });
+          // Set new data
+          source.setData(routeData);
+        }
+      }
+    },
+    []
+  );
+
+  return { updateHarvesterData, updateHarvesterRoutes };
 };
 
 export default useUpdateHarvesterData;

@@ -23,6 +23,29 @@ const onMapLoad = (m: mapboxgl.Map) => {
       },
     });
   }
+  // Create source and layer for harvester routes
+  if (!m.getSource('routes')) {
+    m.addSource('routes', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+  }
+  if (!m.getLayer('routes')) {
+    m.addLayer({
+      id: 'routes',
+      type: 'line',
+      source: 'routes',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round',
+      },
+      paint: {
+        'line-color': '#888',
+        'line-width': 3,
+        'line-opacity': 0.5,
+      },
+    });
+  }
 };
 
 export default onMapLoad;

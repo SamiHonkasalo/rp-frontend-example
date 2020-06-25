@@ -33,7 +33,10 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
 
-  const updateHarvesterData = useUpdateHarvesterData();
+  const {
+    updateHarvesterData,
+    updateHarvesterRoutes,
+  } = useUpdateHarvesterData();
 
   // Create map on mount
   useEffect(() => {
@@ -49,7 +52,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     }
   }, []);
 
-  // Update harvester data when changed
+  // Update harvester and route data when changed
   useEffect(() => {
     const handleOldData = (
       oldData: GeoJSON.FeatureCollection<
@@ -66,6 +69,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
         oldGeoData,
         setOldDataCb: handleOldData,
       });
+      updateHarvesterRoutes({ map, harvesters });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [harvesters, map, updateHarvesterData]);

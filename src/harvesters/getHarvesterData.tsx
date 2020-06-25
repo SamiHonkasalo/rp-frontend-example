@@ -22,16 +22,23 @@ function useHarvesters() {
 
     const interval = setInterval(() => {
       const newHarvesters = harvesters.map((h) => {
+        const curLocation = h.location;
+        const curRoute = [...h.route];
+        if (curRoute.length >= 20) {
+          curRoute.length = 19;
+        }
+        curRoute.push(curLocation);
         return {
           ...h,
           location: {
             lat: h.location.lat + randomCoord(),
             lng: h.location.lng + randomCoord(),
           },
+          route: [...curRoute],
         };
       });
       setHarvesters(newHarvesters);
-    }, 2000);
+    }, 5000);
     return () => {
       clearInterval(interval);
     };
