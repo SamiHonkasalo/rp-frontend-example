@@ -1,9 +1,11 @@
 const onMapLoad = (m: mapboxgl.Map) => {
   // Create source and layer for harvesters
-  m.addSource('harvesters', {
-    type: 'geojson',
-    data: { type: 'FeatureCollection', features: [] },
-  });
+  if (!m.getSource('harvesters')) {
+    m.addSource('harvesters', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+  }
   if (!m.getLayer('harvesters')) {
     m.addLayer({
       id: 'harvesters',

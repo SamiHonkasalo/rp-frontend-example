@@ -46,25 +46,19 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
         center: { lat: 62.2518079, lng: 25.7671327 },
       });
       setMap(m);
-
-      // Create source and layer for harvesters on map load
-      m.on('load', () => {
-        onMapLoad(m);
-      });
-
-      // Add a popup on the map
-      addHarvesterPopup(m);
     }
   }, []);
 
-  const handleOldData = (
-    oldData: GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
-  ) => {
-    setOldGeoData(oldData);
-  };
-
   // Update harvester data when changed
   useEffect(() => {
+    const handleOldData = (
+      oldData: GeoJSON.FeatureCollection<
+        GeoJSON.Point,
+        GeoJSON.GeoJsonProperties
+      >
+    ) => {
+      setOldGeoData(oldData);
+    };
     if (map) {
       updateHarvesterData({
         map,
@@ -89,6 +83,19 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
       map.setStyle('mapbox://styles/mapbox/dark-v10', { diff: false });
     } else if (map && !themeMode) {
       map.setStyle('mapbox://styles/mapbox/outdoors-v11', { diff: false });
+    }
+    if (map) {
+      // Create source and layer for harvesters on map style load
+      map.on('style.load', () => {
+        onMapLoad(map);
+        map.setPaintProperty(
+          'harvesters',
+          'text-color',
+          themeMode ? '#fff' : '#000'
+        );
+        // Add a popup on the map
+        addHarvesterPopup(map);
+      });
     }
   }, [map, themeMode]);
 

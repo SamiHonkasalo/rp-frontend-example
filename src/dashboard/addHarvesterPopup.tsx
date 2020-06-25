@@ -34,7 +34,7 @@ const addHarvesterPopup = (map: mapboxgl.Map) => {
         // based on the feature found.
         popup
           .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
-          .setHTML(description)
+          .setHTML(`<h2 style="color:#000;" >${description}</h2>`)
           .addTo(m);
       }
     }
