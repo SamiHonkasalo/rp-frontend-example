@@ -1,84 +1,66 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from '@material-ui/core/';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { HarvesterContext } from '../store/harvester/harvesterContext';
+import HarvesterTable from './HarvesterTable';
+import HarvesterCards from './HarvesterCards';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
+const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(3),
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(4),
+    },
   },
   tableRow: {
     '&:hover': {
       cursor: 'pointer',
     },
   },
-});
+}));
 
 const HarvesterList = () => {
   const classes = useStyles();
   const history = useHistory();
   const harvContext = useContext(HarvesterContext);
-  const { harvesters } = harvContext;
+  const { harvesters, setSelectedHarvester } = harvContext;
+  const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-  const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
+  const handleItemClick = (event: React.MouseEvent<unknown>, id: string) => {
     // Do not redirect if the button has been clicked
-    if (event.target instanceof Element) {
+    if (
+      event.target instanceof Element &&
+      typeof event.target.className === 'string'
+    ) {
       if (!event.target.className.includes('Button')) {
         history.push(`/harvesters/${id}`);
       }
     }
   };
 
+  const handleButtonClick = (id: string) => {
+    setSelectedHarvester(id);
+    history.push('/');
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="harvester table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Location</TableCell>
-            <TableCell>Region</TableCell>
-            <TableCell>Oil Level</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {harvesters.map((h) => (
-            <TableRow
-              key={h.id}
-              hover
-              onClick={(event) => handleRowClick(event, h.id)}
-              className={classes.tableRow}
-            >
-              <TableCell component="th" scope="row">
-                {h.id}
-              </TableCell>
-              <TableCell>{h.name}</TableCell>
-              <TableCell>
-                lat: {h.location.lat.toFixed(4)} lng:{' '}
-                {h.location.lng.toFixed(4)}
-              </TableCell>
-              <TableCell>Unknown region</TableCell>
-              <TableCell>{h.oilLevel}</TableCell>
-              <TableCell>
-                <Button variant="outlined">SHOW ON MAP</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className={classes.container}>
+      {isSmall ? (
+        <HarvesterCards
+          harvesters={harvesters}
+          handleCardClick={handleItemClick}
+          handleButtonClick={handleButtonClick}
+        />
+      ) : (
+        <HarvesterTable
+          harvesters={harvesters}
+          handleRowClick={handleItemClick}
+          handleButtonClick={handleButtonClick}
+        />
+      )}
+    </div>
   );
 };
 

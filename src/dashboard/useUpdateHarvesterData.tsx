@@ -11,7 +11,7 @@ interface UpdateHarvesters {
   setOldDataCb: (
     data: GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
   ) => void;
-  selectedHarvester: HarvesterType | null;
+  selectedHarvester: HarvesterType;
 }
 
 interface UpdateRoutes {
@@ -134,9 +134,9 @@ const useUpdateHarvesterData = () => {
             // Set new data
             source.setData(geoData);
             // If a harvester is selected, fly to the new harvester location
-            if (selectedHarvester) {
+            if (selectedHarvester.id !== '') {
               const selHarv = geoData.features.find(
-                (f) => f.properties?.id === selectedHarvester
+                (f) => f.properties?.id === selectedHarvester.id
               );
               if (selHarv && !map.isZooming()) {
                 map.flyTo({
