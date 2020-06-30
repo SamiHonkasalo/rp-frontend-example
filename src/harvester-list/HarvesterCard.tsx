@@ -39,7 +39,7 @@ const HarvesterCard = ({
       <CardHeader
         title={
           <div className={classes.cardTitleContent}>
-            <span>Id: {harvester.id}</span>
+            <span>ID: {harvester.id}</span>
             <Tooltip title="Show on map" placement="bottom">
               <IconButton
                 onClick={() => handleButtonClick(harvester.id)}

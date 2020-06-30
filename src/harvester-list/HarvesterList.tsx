@@ -9,6 +9,7 @@ import HarvesterCards from './HarvesterCards';
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    overflow: 'auto',
     padding: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
       padding: theme.spacing(4),
