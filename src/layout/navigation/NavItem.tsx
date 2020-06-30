@@ -29,15 +29,21 @@ interface Props {
   to: string;
   primaryText: string;
   icon: React.ReactNode;
+  exact?: boolean;
 }
 
-const NavItem: React.FC<Props> = ({ to, primaryText, icon }: Props) => {
+const NavItem: React.FC<Props> = ({
+  to,
+  primaryText,
+  icon,
+  exact = true,
+}: Props) => {
   const classes = useStyles();
   return (
     <Tooltip title={primaryText}>
       <NavLink
         to={to}
-        exact
+        exact={exact}
         activeClassName={classes.active}
         className={classes.link}
       >

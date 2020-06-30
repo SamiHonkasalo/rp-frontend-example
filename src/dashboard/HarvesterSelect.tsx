@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   harvesters: HarvesterType[];
-  selectedHarvester: string;
+  selectedHarvester: HarvesterType;
   handleSelectedChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
@@ -29,7 +29,7 @@ const HarvesterSelect = ({
   return (
     <div className={classes.selectContainer}>
       <Select
-        value={selectedHarvester}
+        value={selectedHarvester.id}
         onChange={handleSelectedChange}
         displayEmpty
         className={classes.selectInput}
@@ -40,7 +40,7 @@ const HarvesterSelect = ({
         </MenuItem>
         {harvesters.map((h) => (
           <MenuItem key={h.id} value={h.id}>
-            {h.id}
+            {h.name}
           </MenuItem>
         ))}
       </Select>

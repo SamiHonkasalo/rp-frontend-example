@@ -27,7 +27,7 @@ function useHarvesters() {
         if (curRoute.length >= 20) {
           curRoute.length = 19;
         }
-        curRoute.push(curLocation);
+        curRoute.unshift(curLocation);
         return {
           ...h,
           location: {

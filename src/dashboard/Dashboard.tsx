@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Map from './Map';
-import { HarvesterContext } from '../store/harvester/harvesterContext';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -13,11 +12,9 @@ const useStyles = makeStyles(() => ({
 
 const Dashboard: React.FC = () => {
   const classes = useStyles();
-  const harvContext = useContext(HarvesterContext);
-  const { harvesters } = harvContext;
   return (
     <div className={classes.container}>
-      <Map harvesters={harvesters} />
+      <Map />
     </div>
   );
 };

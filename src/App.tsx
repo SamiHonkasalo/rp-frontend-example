@@ -2,9 +2,9 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Layout from './layout/Layout';
-import TestRoute from './TestRoute';
 import Dashboard from './dashboard/Dashboard';
 import LayoutWrapper from './layout/LayoutWrapper';
+import HarvesterList from './harvester-list/HarvesterList';
 
 function App() {
   return (
@@ -15,8 +15,11 @@ function App() {
             <Route path="/" exact>
               <Dashboard />
             </Route>
-            <Route path="/test" exact>
-              <TestRoute />
+            <Route path="/harvesters" exact>
+              <HarvesterList />
+            </Route>
+            <Route path="/harvesters/:id" exact>
+              <div>Single Harvester</div>
             </Route>
           </Switch>
         </Layout>

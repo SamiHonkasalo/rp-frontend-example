@@ -1,5 +1,7 @@
 type HarvesterType = {
   id: string;
+  name: string;
+  oilLevel: number;
   location: LocationType;
   route: LocationType[];
 };

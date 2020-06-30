@@ -8,7 +8,12 @@ const NavList: React.FC = () => {
   return (
     <>
       <NavItem to="/" icon={<DashboardIcon />} primaryText="Dashboard" />
-      <NavItem to="/test" icon={<AssignmentIcon />} primaryText="Test route" />
+      <NavItem
+        to="/harvesters"
+        icon={<AssignmentIcon />}
+        primaryText="Harvester list"
+        exact={false}
+      />
     </>
   );
 };

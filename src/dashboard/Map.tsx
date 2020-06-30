@@ -8,6 +8,7 @@ import onMapLoad from './onMapLoad';
 import addHarvesterPopup from './addHarvesterPopup';
 import useUpdateHarvesterData from './useUpdateHarvesterData';
 import HarvesterSelect from './HarvesterSelect';
+import { HarvesterContext } from '../store/harvester/harvesterContext';
 
 const useStyles = makeStyles(() => ({
   map: {
@@ -16,13 +17,12 @@ const useStyles = makeStyles(() => ({
     height: '100%',
   },
 }));
-interface Props {
-  harvesters: HarvesterType[];
-}
 
-const Map: React.FC<Props> = ({ harvesters }: Props) => {
+const Map: React.FC = () => {
   const classes = useStyles();
   const { state } = useContext(UIContext);
+  const harvContext = useContext(HarvesterContext);
+  const { harvesters, selectedHarvester, setSelectedHarvester } = harvContext;
   const mapContainer = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const [oldGeoData, setOldGeoData] = useState<
@@ -31,7 +31,6 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     type: 'FeatureCollection',
     features: [],
   });
-  const [selectedHarvester, setSelectedHarvester] = useState('');
 
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
@@ -78,6 +77,16 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [harvesters, map, updateHarvesterData]);
 
+  // Fly to selected harvester when selection changes
+  useEffect(() => {
+    if (map && selectedHarvester.id !== '') {
+      map.flyTo({
+        center: selectedHarvester.location,
+        zoom: 14,
+      });
+    }
+  }, [map, selectedHarvester]);
+
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
   useEffect(() => {
     if (map && !isSmall) {
@@ -112,16 +121,6 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
   ) => {
     const val = event.target.value as string;
     setSelectedHarvester(val);
-    // Find the selected harvester and fly to it
-    if (map) {
-      const selHarv = harvesters.find((s) => s.id === val);
-      if (selHarv) {
-        map.flyTo({
-          center: selHarv.location,
-          zoom: 14,
-        });
-      }
-    }
   };
 
   return (
