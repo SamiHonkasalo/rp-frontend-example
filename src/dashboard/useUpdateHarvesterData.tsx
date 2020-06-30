@@ -11,6 +11,7 @@ interface UpdateHarvesters {
   setOldDataCb: (
     data: GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
   ) => void;
+  selectedHarvester: string;
 }
 
 interface UpdateRoutes {
@@ -18,9 +19,20 @@ interface UpdateRoutes {
   harvesters: HarvesterType[];
 }
 
+interface HarvesterLine {
+  id: string;
+  lines: turf.helpers.Feature<turf.helpers.Point, turf.helpers.Properties>[];
+}
+
 const useUpdateHarvesterData = () => {
   const updateHarvesterData = useCallback(
-    ({ map, harvesters, oldGeoData, setOldDataCb }: UpdateHarvesters) => {
+    ({
+      map,
+      harvesters,
+      oldGeoData,
+      setOldDataCb,
+      selectedHarvester,
+    }: UpdateHarvesters) => {
       // Amount of steps to be used in the animation of the movement
       const steps = 200;
       const geoData: GeoJSON.FeatureCollection<
@@ -32,17 +44,14 @@ const useUpdateHarvesterData = () => {
       };
 
       // Create routes/lines for each harvester and animate the marker based on those lines
-      const lines = [] as turf.helpers.Feature<
-        turf.helpers.Point,
-        turf.helpers.Properties
-      >[][];
+      const lines = [] as HarvesterLine[];
       harvesters.forEach((h) => {
         const line = [] as turf.helpers.Feature<
           turf.helpers.Point,
           turf.helpers.Properties
         >[];
         const oldHarvData = oldGeoData.features.find(
-          (f) => f.properties?.title === h.id
+          (f) => f.properties?.id === h.id
         );
         if (oldHarvData) {
           const { coordinates } = oldHarvData.geometry;
@@ -82,17 +91,18 @@ const useUpdateHarvesterData = () => {
             type: 'Point',
             coordinates: [h.location.lng, h.location.lat],
           },
+          id: h.id,
           properties: {
+            id: h.id,
             title: h.id,
             description: `Harvester ${h.id}`,
             icon: 'rocket',
           },
         });
-        lines.push(line);
+        lines.push({ id: h.id, lines: line });
       });
       // Set old data to state to be used when calculating the route
       setOldDataCb(geoData);
-      // setOldGeoData(geoData);
 
       // Counter for coordinate/animation updates
       let counter = 0;
@@ -104,20 +114,36 @@ const useUpdateHarvesterData = () => {
           ) as mapboxgl.GeoJSONSource;
           if (source) {
             // Loop through all harvesters and update coords based on the coordinate array created by turf
-            for (let i = 0; i < harvesters.length; i += 1) {
-              if (
-                lines.length > 0 &&
-                lines[i][counter] &&
-                lines[i][counter].geometry
-              ) {
-                const newCoords = lines[i][counter].geometry?.coordinates;
-                if (newCoords) {
-                  geoData.features[i].geometry.coordinates = newCoords;
+            harvesters.forEach((h) => {
+              if (lines.length > 0) {
+                // Find the corresponding lines array and harvester feature
+                const harvLine = lines.find((l) => l.id === h.id);
+                const harvFeature = geoData.features.find(
+                  (f) => f.properties?.id === h.id
+                );
+                if (harvLine && harvFeature) {
+                  const newCoords =
+                    harvLine.lines[counter]?.geometry?.coordinates;
+                  if (newCoords) {
+                    harvFeature.geometry.coordinates = newCoords;
+                  }
                 }
               }
-            }
+            });
+
             // Set new data
             source.setData(geoData);
+            // If a harvester is selected, fly to the new harvester location
+            if (selectedHarvester !== '') {
+              const selHarv = geoData.features.find(
+                (f) => f.properties?.id === selectedHarvester
+              );
+              if (selHarv && !map.isZooming()) {
+                map.flyTo({
+                  center: [...selHarv.geometry.coordinates] as [number, number],
+                });
+              }
+            }
           }
         }
         if (counter < steps) {

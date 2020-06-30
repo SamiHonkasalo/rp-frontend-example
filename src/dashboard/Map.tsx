@@ -7,6 +7,7 @@ import { UIContext } from '../store/ui/uiContext';
 import onMapLoad from './onMapLoad';
 import addHarvesterPopup from './addHarvesterPopup';
 import useUpdateHarvesterData from './useUpdateHarvesterData';
+import HarvesterSelect from './HarvesterSelect';
 
 const useStyles = makeStyles(() => ({
   map: {
@@ -30,6 +31,8 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     type: 'FeatureCollection',
     features: [],
   });
+  const [selectedHarvester, setSelectedHarvester] = useState('');
+
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
 
@@ -68,6 +71,7 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
         harvesters,
         oldGeoData,
         setOldDataCb: handleOldData,
+        selectedHarvester,
       });
       updateHarvesterRoutes({ map, harvesters });
     }
@@ -103,7 +107,32 @@ const Map: React.FC<Props> = ({ harvesters }: Props) => {
     }
   }, [map, themeMode]);
 
-  return <div ref={mapContainer} className={`${classes.map} mapboxgl-map`} />;
+  const handleSelectedChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const val = event.target.value as string;
+    setSelectedHarvester(val);
+    // Find the selected harvester and fly to it
+    if (map) {
+      const selHarv = harvesters.find((s) => s.id === val);
+      if (selHarv) {
+        map.flyTo({
+          center: selHarv.location,
+          zoom: 14,
+        });
+      }
+    }
+  };
+
+  return (
+    <div ref={mapContainer} className={`${classes.map} mapboxgl-map`}>
+      <HarvesterSelect
+        harvesters={harvesters}
+        handleSelectedChange={handleSelectedChange}
+        selectedHarvester={selectedHarvester}
+      />
+    </div>
+  );
 };
 
 export default Map;

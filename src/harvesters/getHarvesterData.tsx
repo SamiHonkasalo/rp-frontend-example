@@ -13,8 +13,8 @@ function useHarvesters() {
 
   useEffect(() => {
     const randomCoord = () => {
-      const min = 0.01;
-      const max = 0.03;
+      const min = 0.002;
+      const max = 0.005;
       const rand = parseFloat((Math.random() * (max - min) + min).toFixed(4));
       const fct = Math.round(Math.random()) ? 1 : -1;
       return rand * fct;
