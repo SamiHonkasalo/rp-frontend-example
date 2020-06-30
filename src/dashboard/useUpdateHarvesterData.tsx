@@ -34,7 +34,7 @@ const useUpdateHarvesterData = () => {
       selectedHarvester,
     }: UpdateHarvesters) => {
       // Amount of steps to be used in the animation of the movement
-      const steps = 200;
+      const steps = 250;
       const geoData: GeoJSON.FeatureCollection<
         GeoJSON.Point,
         GeoJSON.GeoJsonProperties

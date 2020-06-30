@@ -16,6 +16,14 @@ const HARVESTER_DATA: HarvesterType[] = [
     },
     route: [],
   },
+  {
+    id: 'h3',
+    location: {
+      lat: 63.6518079,
+      lng: 25.8671327,
+    },
+    route: [],
+  },
 ];
 
 export default HARVESTER_DATA;
