@@ -49,7 +49,7 @@ const HarvesterList = () => {
 
   return (
     <div className={classes.container}>
-      {isSmall || true ? (
+      {isSmall ? (
         <HarvesterCards
           harvesters={harvesters}
           handleCardClick={handleItemClick}
