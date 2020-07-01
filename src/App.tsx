@@ -5,6 +5,7 @@ import Layout from './layout/Layout';
 import Dashboard from './dashboard/Dashboard';
 import LayoutWrapper from './layout/LayoutWrapper';
 import HarvesterList from './harvester-list/HarvesterList';
+import SingleHarvester from './single-harvester/SingleHarvester';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
               <HarvesterList />
             </Route>
             <Route path="/harvesters/:id" exact>
-              <div>Single Harvester</div>
+              <SingleHarvester />
             </Route>
           </Switch>
         </Layout>
