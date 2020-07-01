@@ -31,6 +31,7 @@ const Map: React.FC = () => {
     type: 'FeatureCollection',
     features: [],
   });
+  const [prevSelected, setPrevSelected] = useState('');
 
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const { sideDrawerTransitioned, themeMode } = state;
@@ -83,10 +84,16 @@ const Map: React.FC = () => {
       map.flyTo({
         center: selHarv.location,
         zoom: 14,
-        speed: map.getZoom() === 14 ? 0.05 : 1.42,
+        speed:
+          map.getZoom() === 14 && selectedHarvester === prevSelected
+            ? 0.02
+            : 1.42,
       });
     }
-  }, [map, harvesters, selectedHarvester]);
+    if (selectedHarvester !== prevSelected) {
+      setPrevSelected(selectedHarvester);
+    }
+  }, [map, harvesters, selectedHarvester, prevSelected]);
 
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
   useEffect(() => {

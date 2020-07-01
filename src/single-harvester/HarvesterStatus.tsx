@@ -51,7 +51,6 @@ const HarvesterStatus = ({
   const handleEditClick = () => {
     setEditMode((prevMode) => !prevMode);
   };
-  console.log(inputDefaultValue);
   return (
     <Grid item xs={12} sm={6} md={2}>
       <Card className={classes.card}>
