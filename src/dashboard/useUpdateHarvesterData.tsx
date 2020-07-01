@@ -11,7 +11,6 @@ interface UpdateHarvesters {
   setOldDataCb: (
     data: GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
   ) => void;
-  selectedHarvester: string;
 }
 
 interface UpdateRoutes {
@@ -26,13 +25,7 @@ interface HarvesterLine {
 
 const useUpdateHarvesterData = () => {
   const updateHarvesterData = useCallback(
-    ({
-      map,
-      harvesters,
-      oldGeoData,
-      setOldDataCb,
-      selectedHarvester,
-    }: UpdateHarvesters) => {
+    ({ map, harvesters, oldGeoData, setOldDataCb }: UpdateHarvesters) => {
       // Amount of steps to be used in the animation of the movement
       const steps = 250;
       const geoData: GeoJSON.FeatureCollection<
@@ -133,17 +126,6 @@ const useUpdateHarvesterData = () => {
 
             // Set new data
             source.setData(geoData);
-            // If a harvester is selected, fly to the new harvester location
-            if (selectedHarvester !== '') {
-              const selHarv = geoData.features.find(
-                (f) => f.properties?.id === selectedHarvester
-              );
-              if (selHarv && !map.isZooming()) {
-                map.flyTo({
-                  center: [...selHarv.geometry.coordinates] as [number, number],
-                });
-              }
-            }
           }
         }
         if (counter < steps) {

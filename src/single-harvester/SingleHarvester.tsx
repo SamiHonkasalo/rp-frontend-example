@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
@@ -19,18 +19,27 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleHarvester = () => {
   const classes = useStyles();
+  const history = useHistory();
   const { id } = useParams();
   const harvContext = useContext(HarvesterContext);
   const { harvesters, setSelectedHarvester } = harvContext;
 
   const SEL_HARV = harvesters.find((h) => h.id === id);
 
+  const handleButtonClick = (harvId: string) => {
+    setSelectedHarvester(harvId);
+    history.push('/');
+  };
+
   return (
     <div className={classes.container}>
       {SEL_HARV ? (
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <HarvesterItem harvester={SEL_HARV} />
+            <HarvesterItem
+              harvester={SEL_HARV}
+              handleButtonClick={handleButtonClick}
+            />
           </Grid>
         </Grid>
       ) : (

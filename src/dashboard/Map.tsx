@@ -70,24 +70,23 @@ const Map: React.FC = () => {
         harvesters,
         oldGeoData,
         setOldDataCb: handleOldData,
-        selectedHarvester,
       });
       updateHarvesterRoutes({ map, harvesters });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [harvesters, map, updateHarvesterData]);
 
-  // Fly to selected harvester when selection changes
+  // Fly to selected harvester when selection/location changes
   useEffect(() => {
     const selHarv = harvesters.find((h) => h.id === selectedHarvester);
-    if (map && selHarv) {
+    if (map && selHarv && !map.isZooming()) {
       map.flyTo({
         center: selHarv.location,
         zoom: 14,
+        speed: map.getZoom() === 14 ? 0.05 : 1.42,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, selectedHarvester]);
+  }, [map, harvesters, selectedHarvester]);
 
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
   useEffect(() => {

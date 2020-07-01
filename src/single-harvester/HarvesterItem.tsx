@@ -21,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   harvester: HarvesterType;
+  handleButtonClick: (id: string) => void;
 }
 
-const HarvesterItem = ({ harvester }: Props) => {
+const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
   const classes = useStyles();
   return (
     <Card>
@@ -35,7 +36,10 @@ const HarvesterItem = ({ harvester }: Props) => {
         }
         action={
           <Tooltip title="Show on map" placement="bottom">
-            <IconButton aria-label="show on map">
+            <IconButton
+              aria-label="show on map"
+              onClick={() => handleButtonClick(harvester.id)}
+            >
               <MapIcon />
             </IconButton>
           </Tooltip>
