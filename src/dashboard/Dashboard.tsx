@@ -5,7 +5,6 @@ import Map from './Map';
 const useStyles = makeStyles(() => ({
   container: {
     height: '100%',
-    overflow: 'auto',
     margin: 'auto',
   },
 }));

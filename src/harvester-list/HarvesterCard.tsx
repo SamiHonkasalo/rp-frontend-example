@@ -59,7 +59,7 @@ const HarvesterCard = ({
         </span>
         <span className={classes.cardContentRow}>Region: Unknown region</span>
         <span className={classes.cardContentRow}>
-          Oil level: {harvester.oilLevel}
+          Oil level: {harvester.oilLevel} %
         </span>
       </CardContent>
     </Card>

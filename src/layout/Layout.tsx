@@ -17,16 +17,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   main: {
     flexGrow: 1,
     height: '100vh',
-    overflow: 'auto',
     display: 'flex',
     flexDirection: 'column',
   },
   content: {
     height: '100%',
+    overflow: 'auto',
   },
   container: {
     height: '100%',
-    overflow: 'auto',
     padding: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
       padding: theme.spacing(1),

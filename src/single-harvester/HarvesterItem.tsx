@@ -47,7 +47,7 @@ const HarvesterItem = ({ harvester }: Props) => {
         <Grid container spacing={4}>
           <HarvesterStatus
             title="Oil level"
-            text={`${harvester.oilLevel.toString()}%`}
+            text={`${harvester.oilLevel.toString()} %`}
           />
           <HarvesterStatus
             title="Location"
