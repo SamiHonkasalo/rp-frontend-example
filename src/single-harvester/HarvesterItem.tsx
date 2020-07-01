@@ -50,15 +50,24 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
       <CardContent>
         <Grid container spacing={4}>
           <HarvesterStatus
-            title="Oil level"
-            text={`${harvester.oilLevel.toString()} %`}
-          />
-          <HarvesterStatus
             title="Location"
-            text={`lat:${harvester.location.lat.toFixed(4)} 
+            text={`lat: ${harvester.location.lat.toFixed(4)} 
             lng: ${harvester.location.lng.toFixed(4)}`}
           />
           <HarvesterStatus title="Region" text="Unknown region" />
+          <HarvesterStatus
+            title="Oil level"
+            text={`${harvester.oilLevel.toString()}`}
+            unit="%"
+          />
+          <HarvesterStatus
+            title="Oil level limit"
+            text={`${harvester.oilLimit.toString()}`}
+            unit="%"
+            edit
+            inputType="number"
+            inputDefaultValue={harvester.oilLimit}
+          />
         </Grid>
       </CardContent>
       <CardContent>INSERT GRAPH HERE</CardContent>
