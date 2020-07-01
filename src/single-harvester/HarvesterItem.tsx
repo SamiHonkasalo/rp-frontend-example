@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
@@ -31,7 +32,12 @@ interface Props {
   handleButtonClick: (id: string) => void;
 }
 
+interface FormInputs {
+  oilLimit: number;
+}
+
 const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
+  const { register, handleSubmit, errors, setValue } = useForm<FormInputs>();
   const classes = useStyles();
   const [editMode, setEditMode] = useState(false);
 
@@ -39,9 +45,13 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
     setEditMode((prevMode) => !prevMode);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = (data: FormInputs) => {
     console.log('submit');
+    console.log(data);
+  };
+
+  const handleInputChange = (val: unknown, name: string) => {
+    setValue(name, val as string, { shouldValidate: true });
   };
 
   return (
@@ -73,12 +83,12 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
         subheader="More harvester info?"
       />
       <CardContent>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 label="Location"
-                value={`lat: ${harvester.location.lat.toFixed(4)} 
+                defaultValue={`lat: ${harvester.location.lat.toFixed(4)} 
               lng: ${harvester.location.lng.toFixed(4)}`}
                 type="text"
                 multiline
@@ -87,14 +97,14 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 label="Region"
-                value="Unknown region"
+                defaultValue="Unknown region"
                 type="text"
               />
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 label="Oil level"
-                value={harvester.oilLevel}
+                defaultValue={harvester.oilLevel}
                 type="number"
                 unit="%"
               />
@@ -102,11 +112,15 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 label="Oil level limit"
-                value={harvester.oilLimit}
+                defaultValue={harvester.oilLimit}
                 type="number"
                 unit="%"
                 editable
                 edit={editMode}
+                inputRef={register({ required: true, min: 10, max: 80 })}
+                name="oilLimit"
+                errors={errors.oilLimit}
+                onChange={handleInputChange}
               />
             </Grid>
           </Grid>
