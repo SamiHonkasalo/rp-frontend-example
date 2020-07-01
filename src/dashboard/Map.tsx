@@ -79,12 +79,14 @@ const Map: React.FC = () => {
 
   // Fly to selected harvester when selection changes
   useEffect(() => {
-    if (map && selectedHarvester.id !== '') {
+    const selHarv = harvesters.find((h) => h.id === selectedHarvester);
+    if (map && selHarv) {
       map.flyTo({
-        center: selectedHarvester.location,
+        center: selHarv.location,
         zoom: 14,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, selectedHarvester]);
 
   // Resize the map when sidedrawer state changes (transition is over) and it's not temporary
