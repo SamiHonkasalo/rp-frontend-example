@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 
 import { HarvesterContext } from '../store/harvester/harvesterContext';
 import HarvesterItem from './HarvesterItem';
+import HarvesterGraph from './HarvesterGraph';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,12 +35,15 @@ const SingleHarvester = () => {
   return (
     <div className={classes.container}>
       {SEL_HARV ? (
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
+        <Grid container justify="center" spacing={4}>
+          <Grid item xs={12} md={8}>
             <HarvesterItem
               harvester={SEL_HARV}
               handleButtonClick={handleButtonClick}
             />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <HarvesterGraph />
           </Grid>
         </Grid>
       ) : (
