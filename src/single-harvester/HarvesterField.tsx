@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, InputAdornment } from '@material-ui/core';
+// eslint-disable-next-line import/no-unresolved
 import { FieldErrors } from 'react-hook-form/dist/types/form';
 
 const useStyles = makeStyles(() => ({

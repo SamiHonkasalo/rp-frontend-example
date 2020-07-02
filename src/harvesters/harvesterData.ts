@@ -10,6 +10,7 @@ const HARVESTER_DATA: HarvesterType[] = [
       lng: 25.7671327,
     },
     route: [],
+    oilLevelHistory: [],
   },
   {
     id: 'h2',
@@ -21,6 +22,7 @@ const HARVESTER_DATA: HarvesterType[] = [
       lng: 24.8671327,
     },
     route: [],
+    oilLevelHistory: [],
   },
   {
     id: 'h3',
@@ -32,6 +34,7 @@ const HARVESTER_DATA: HarvesterType[] = [
       lng: 25.8671327,
     },
     route: [],
+    oilLevelHistory: [],
   },
   {
     id: 'h4',
@@ -43,6 +46,7 @@ const HARVESTER_DATA: HarvesterType[] = [
       lng: 23.8671327,
     },
     route: [],
+    oilLevelHistory: [],
   },
 ];
 

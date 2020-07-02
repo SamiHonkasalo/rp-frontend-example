@@ -43,7 +43,7 @@ const SingleHarvester = () => {
             />
           </Grid>
           <Grid item xs={12} md={8}>
-            <HarvesterGraph />
+            <HarvesterGraph harvester={SEL_HARV} />
           </Grid>
         </Grid>
       ) : (

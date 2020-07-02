@@ -5,9 +5,15 @@ type HarvesterType = {
   oilLimit: number;
   location: LocationType;
   route: LocationType[];
+  oilLevelHistory: OilLevelHistoryType[];
 };
 
 type LocationType = {
   lat: number;
   lng: number;
+};
+
+type OilLevelHistoryType = {
+  time: Date;
+  value: HarvesterType['oilLevel'];
 };

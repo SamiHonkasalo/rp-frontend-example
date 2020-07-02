@@ -12,9 +12,7 @@ function useHarvesters() {
   }, [setHarvesters]);
 
   useEffect(() => {
-    const randomCoord = () => {
-      const min = 0.0005;
-      const max = 0.002;
+    const randomNum = (min = 0.0005, max = 0.002) => {
       const rand = parseFloat((Math.random() * (max - min) + min).toFixed(4));
       const fct = Math.round(Math.random()) ? 1 : -1;
       return rand * fct;
@@ -22,19 +20,34 @@ function useHarvesters() {
 
     const interval = setInterval(() => {
       const newHarvesters = harvesters.map((h) => {
+        // Set the new location and create the route array
         const curLocation = h.location;
         const curRoute = [...h.route];
         if (curRoute.length >= 20) {
           curRoute.length = 19;
         }
         curRoute.unshift(curLocation);
+
+        // Also set the oil level history and change the oil level
+        const curOilLevel = h.oilLevel;
+        const curHistory = [...h.oilLevelHistory];
+        if (curHistory.length >= 50) {
+          curHistory.length = 49;
+        }
+        const newMeas: OilLevelHistoryType = {
+          time: new Date(),
+          value: curOilLevel,
+        };
+        curHistory.unshift(newMeas);
         return {
           ...h,
           location: {
-            lat: h.location.lat + randomCoord(),
-            lng: h.location.lng + randomCoord(),
+            lat: h.location.lat + randomNum(),
+            lng: h.location.lng + randomNum(),
           },
+          oilLevel: parseFloat((curOilLevel + randomNum(0.5, 2)).toFixed(1)),
           route: [...curRoute],
+          oilLevelHistory: [...curHistory],
         };
       });
       setHarvesters(newHarvesters);
