@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
+import { UIContext } from '../store/ui/uiContext';
+import useGraphStyles from './useGraphStyles';
 
 interface Props {
   harvester: HarvesterType;
@@ -11,7 +13,10 @@ const HarvesterGraph = ({ harvester }: Props) => {
   const [options, setOptions] = useState<Highcharts.Options>();
   const [initialized, setInitialized] = useState(false);
   const [chart, setChart] = useState<Highcharts.Chart | undefined>();
+  const { state } = useContext(UIContext);
+  const getGraphStyles = useGraphStyles();
 
+  const { themeMode } = state;
   const { name, oilLevelHistory } = harvester;
 
   const chartCreated = (c: Highcharts.Chart) => {
@@ -77,6 +82,14 @@ const HarvesterGraph = ({ harvester }: Props) => {
       chart.series[0].addPoint(point);
     }
   }, [chart, initialized, oilLevelHistory]);
+
+  // Change chart theme when app theme changes
+  useEffect(() => {
+    console.log('change theme');
+    if (chart) {
+      chart.update(getGraphStyles(themeMode));
+    }
+  }, [themeMode, chart, getGraphStyles]);
 
   return initialized ? (
     <Card>
