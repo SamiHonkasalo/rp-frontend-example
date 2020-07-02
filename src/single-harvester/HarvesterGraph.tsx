@@ -85,7 +85,6 @@ const HarvesterGraph = ({ harvester }: Props) => {
 
   // Change chart theme when app theme changes
   useEffect(() => {
-    console.log('change theme');
     if (chart) {
       chart.update(getGraphStyles(themeMode));
     }

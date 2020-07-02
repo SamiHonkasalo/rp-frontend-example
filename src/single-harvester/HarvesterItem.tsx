@@ -68,7 +68,11 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
         action={
           <>
             <Tooltip title="Edit" placement="bottom">
-              <IconButton aria-label="edit" onClick={handleEditToggle}>
+              <IconButton
+                aria-label="edit"
+                onClick={handleEditToggle}
+                color="primary"
+              >
                 {editMode ? <ClearIcon /> : <EditIcon />}
               </IconButton>
             </Tooltip>
@@ -134,7 +138,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             {editMode && (
               <div style={{ marginLeft: 'auto' }}>
                 <Tooltip title="Save" placement="bottom">
-                  <IconButton type="submit" aria-label="save">
+                  <IconButton type="submit" aria-label="save" color="secondary">
                     <SaveIcon />
                   </IconButton>
                 </Tooltip>
