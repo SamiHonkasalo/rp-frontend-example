@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, InputAdornment } from '@material-ui/core';
-import { FieldError } from 'react-hook-form/dist/types/form';
+import { FieldErrors } from 'react-hook-form/dist/types/form';
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -17,20 +17,23 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
+  harvester: HarvesterType;
+  name?: keyof HarvesterType;
   label: string;
-  defaultValue: string | number;
+  defaultValue?: string | number;
   type: React.InputHTMLAttributes<unknown>['type'];
   unit?: string;
   editable?: boolean;
   edit?: boolean;
   multiline?: boolean;
+  step?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inputRef?: any;
-  name?: string;
-  errors?: FieldError;
-  onChange?: (val: unknown, name: string) => void;
+  errors?: FieldErrors;
 }
 
 const HarvesterField = ({
+  harvester,
   label,
   defaultValue,
   type,
@@ -38,14 +41,14 @@ const HarvesterField = ({
   editable,
   edit = false,
   multiline = false,
+  step = 1,
   inputRef,
   name,
   errors,
-  onChange,
 }: Props) => {
   const classes = useStyles();
   let errorText = '';
-  const errType = errors?.type;
+  const errType = errors && name && errors[name]?.type;
   if (errType) {
     switch (errType) {
       case 'required':
@@ -62,19 +65,13 @@ const HarvesterField = ({
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    if (onChange) {
-      onChange(e.target.value, name || label);
-    }
-  };
-
   return (
     <TextField
       id={label}
       label={label}
       type={type}
       name={name || label}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue || (name && harvester[name])}
       classes={{ root: classes.textField }}
       InputProps={{
         startAdornment: unit && (
@@ -85,14 +82,13 @@ const HarvesterField = ({
         disableUnderline: !editable,
         inputProps: {
           className: classes.multiLineText,
-          step: 0.1,
+          step,
         },
       }}
       multiline={multiline}
       inputRef={inputRef}
-      error={!!errors}
+      error={errors && name && !!errors[name]}
       helperText={errorText}
-      onChange={handleChange}
     />
   );
 };

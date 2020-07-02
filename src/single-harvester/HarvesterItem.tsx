@@ -34,24 +34,27 @@ interface Props {
 
 interface FormInputs {
   oilLimit: number;
+  test: number;
 }
 
 const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
-  const { register, handleSubmit, errors, setValue } = useForm<FormInputs>();
+  const { register, handleSubmit, errors, reset } = useForm<FormInputs>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
   const classes = useStyles();
   const [editMode, setEditMode] = useState(false);
 
   const handleEditToggle = () => {
+    if (editMode) {
+      reset();
+    }
     setEditMode((prevMode) => !prevMode);
   };
 
   const onSubmit = (data: FormInputs) => {
     console.log('submit');
     console.log(data);
-  };
-
-  const handleInputChange = (val: unknown, name: string) => {
-    setValue(name, val as string, { shouldValidate: true });
   };
 
   return (
@@ -87,6 +90,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
+                harvester={harvester}
                 label="Location"
                 defaultValue={`lat: ${harvester.location.lat.toFixed(4)} 
               lng: ${harvester.location.lng.toFixed(4)}`}
@@ -96,6 +100,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
+                harvester={harvester}
                 label="Region"
                 defaultValue="Unknown region"
                 type="text"
@@ -103,24 +108,25 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
+                harvester={harvester}
+                name="oilLevel"
                 label="Oil level"
-                defaultValue={harvester.oilLevel}
                 type="number"
                 unit="%"
               />
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
+                harvester={harvester}
+                name="oilLimit"
                 label="Oil level limit"
-                defaultValue={harvester.oilLimit}
                 type="number"
                 unit="%"
+                step={0.1}
                 editable
                 edit={editMode}
                 inputRef={register({ required: true, min: 10, max: 80 })}
-                name="oilLimit"
-                errors={errors.oilLimit}
-                onChange={handleInputChange}
+                errors={errors}
               />
             </Grid>
           </Grid>
