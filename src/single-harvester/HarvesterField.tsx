@@ -72,7 +72,10 @@ const HarvesterField = ({
       label={label}
       type={type}
       name={name || label}
-      defaultValue={defaultValue || (name && harvester[name])}
+      value={!editable ? defaultValue || (name && harvester[name]) : undefined}
+      defaultValue={
+        editable ? defaultValue || (name && harvester[name]) : undefined
+      }
       classes={{ root: classes.textField }}
       InputProps={{
         startAdornment: unit && (

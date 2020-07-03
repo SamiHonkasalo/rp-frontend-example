@@ -8,7 +8,6 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Tooltip,
 } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/Map';
@@ -65,14 +64,14 @@ const HarvesterTable = ({
               <TableCell>Unknown region</TableCell>
               <TableCell>{h.oilLevel} %</TableCell>
               <TableCell>
-                <Tooltip title="Show on map" placement="bottom">
-                  <IconButton
-                    aria-label="show on map"
-                    onClick={() => handleButtonClick(h.id)}
-                  >
-                    <MapIcon />
-                  </IconButton>
-                </Tooltip>
+                <IconButton
+                  title="Show on map"
+                  aria-label="show on map"
+                  onClick={() => handleButtonClick(h.id)}
+                  color="secondary"
+                >
+                  <MapIcon />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}

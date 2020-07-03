@@ -16,9 +16,8 @@ const HarvesterCards: React.FC<Props> = ({
   return (
     <Grid container spacing={3}>
       {harvesters.map((h) => (
-        <Grid item xs={12}>
+        <Grid item xs={12} key={h.id}>
           <HarvesterCard
-            key={h.id}
             harvester={h}
             handleCardClick={handleCardClick}
             handleButtonClick={handleButtonClick}

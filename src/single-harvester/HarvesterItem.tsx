@@ -7,7 +7,6 @@ import {
   Avatar,
   IconButton,
   CardContent,
-  Tooltip,
   Grid,
   CardActions,
 } from '@material-ui/core';
@@ -34,7 +33,6 @@ interface Props {
 
 interface FormInputs {
   oilLimit: number;
-  test: number;
 }
 
 const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
@@ -67,23 +65,22 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
         }
         action={
           <>
-            <Tooltip title="Edit" placement="bottom">
-              <IconButton
-                aria-label="edit"
-                onClick={handleEditToggle}
-                color="primary"
-              >
-                {editMode ? <ClearIcon /> : <EditIcon />}
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Show on map" placement="bottom">
-              <IconButton
-                aria-label="show on map"
-                onClick={() => handleButtonClick(harvester.id)}
-              >
-                <MapIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              title={editMode ? 'Cancel' : 'Edit'}
+              aria-label={editMode ? 'cancel' : 'edit'}
+              onClick={handleEditToggle}
+              color="primary"
+            >
+              {editMode ? <ClearIcon /> : <EditIcon />}
+            </IconButton>
+            <IconButton
+              title="Show on map"
+              color="secondary"
+              aria-label="show on map"
+              onClick={() => handleButtonClick(harvester.id)}
+            >
+              <MapIcon />
+            </IconButton>
           </>
         }
         title={harvester.name}
@@ -137,11 +134,14 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
           <CardActions>
             {editMode && (
               <div style={{ marginLeft: 'auto' }}>
-                <Tooltip title="Save" placement="bottom">
-                  <IconButton type="submit" aria-label="save" color="secondary">
-                    <SaveIcon />
-                  </IconButton>
-                </Tooltip>
+                <IconButton
+                  type="submit"
+                  aria-label="save"
+                  color="secondary"
+                  title="Save"
+                >
+                  <SaveIcon />
+                </IconButton>
               </div>
             )}
           </CardActions>

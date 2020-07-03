@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -40,22 +39,21 @@ const NavItem: React.FC<Props> = ({
 }: Props) => {
   const classes = useStyles();
   return (
-    <Tooltip title={primaryText}>
-      <NavLink
-        to={to}
-        exact={exact}
-        activeClassName={classes.active}
-        className={classes.link}
-      >
-        <ListItem button>
-          <ListItemIcon classes={{ root: classes.icon }}>{icon}</ListItemIcon>
-          <ListItemText
-            classes={{ primary: classes.itemText }}
-            primary={primaryText}
-          />
-        </ListItem>
-      </NavLink>
-    </Tooltip>
+    <NavLink
+      title={primaryText}
+      to={to}
+      exact={exact}
+      activeClassName={classes.active}
+      className={classes.link}
+    >
+      <ListItem button>
+        <ListItemIcon classes={{ root: classes.icon }}>{icon}</ListItemIcon>
+        <ListItemText
+          classes={{ primary: classes.itemText }}
+          primary={primaryText}
+        />
+      </ListItem>
+    </NavLink>
   );
 };
 

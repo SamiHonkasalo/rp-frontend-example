@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import MapIcon from '@material-ui/icons/Map';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,14 +40,14 @@ const HarvesterCard = ({
         title={
           <div className={classes.cardTitleContent}>
             <span>ID: {harvester.id}</span>
-            <Tooltip title="Show on map" placement="bottom">
-              <IconButton
-                onClick={() => handleButtonClick(harvester.id)}
-                aria-label="show on map"
-              >
-                <MapIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              title="Show on map"
+              onClick={() => handleButtonClick(harvester.id)}
+              aria-label="show on map"
+              color="secondary"
+            >
+              <MapIcon />
+            </IconButton>
           </div>
         }
       />
