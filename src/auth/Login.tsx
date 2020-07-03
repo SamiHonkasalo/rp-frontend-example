@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Avatar,
@@ -39,6 +40,7 @@ interface FormInputs {
 const Login = () => {
   const classes = useStyles();
   const { login } = useContext(AuthContext);
+  const history = useHistory();
 
   const { register, handleSubmit, errors } = useForm<FormInputs>({
     mode: 'onChange',
@@ -49,6 +51,7 @@ const Login = () => {
     console.log('submit');
     console.log(data);
     login(data.email);
+    history.goBack();
   };
 
   return (

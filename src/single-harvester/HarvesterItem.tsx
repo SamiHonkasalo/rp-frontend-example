@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -16,6 +16,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import SaveIcon from '@material-ui/icons/Save';
 
 import HarvesterField from './HarvesterField';
+import { AuthContext } from '../store/auth/authContext';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -40,6 +41,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+  const { isLoggedIn } = useContext(AuthContext);
   const classes = useStyles();
   const [editMode, setEditMode] = useState(false);
 
@@ -65,14 +67,16 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
         }
         action={
           <>
-            <IconButton
-              title={editMode ? 'Cancel' : 'Edit'}
-              aria-label={editMode ? 'cancel' : 'edit'}
-              onClick={handleEditToggle}
-              color="primary"
-            >
-              {editMode ? <ClearIcon /> : <EditIcon />}
-            </IconButton>
+            {isLoggedIn && (
+              <IconButton
+                title={editMode ? 'Cancel' : 'Edit'}
+                aria-label={editMode ? 'cancel' : 'edit'}
+                onClick={handleEditToggle}
+                color="primary"
+              >
+                {editMode ? <ClearIcon /> : <EditIcon />}
+              </IconButton>
+            )}
             <IconButton
               title="Show on map"
               color="secondary"
@@ -124,7 +128,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
                 type="number"
                 unit="%"
                 step={0.1}
-                editable
+                editable={isLoggedIn}
                 edit={editMode}
                 inputRef={register({ required: true, min: 10, max: 80 })}
                 errors={errors}
