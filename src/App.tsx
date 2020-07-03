@@ -6,6 +6,7 @@ import Dashboard from './dashboard/Dashboard';
 import LayoutWrapper from './layout/LayoutWrapper';
 import HarvesterList from './harvester-list/HarvesterList';
 import SingleHarvester from './single-harvester/SingleHarvester';
+import Login from './auth/Login';
 
 function App() {
   return (
@@ -13,6 +14,9 @@ function App() {
       <div className="App">
         <Layout>
           <Switch>
+            <Route path="/login" exact>
+              <Login />
+            </Route>
             <Route path="/" exact>
               <Dashboard />
             </Route>
