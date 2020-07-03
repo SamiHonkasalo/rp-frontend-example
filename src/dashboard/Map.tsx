@@ -89,9 +89,9 @@ const Map: React.FC = () => {
             ? 0.02
             : 1.42,
       });
-    }
-    if (selectedHarvester !== prevSelected) {
-      setPrevSelected(selectedHarvester);
+      if (selectedHarvester !== prevSelected) {
+        setPrevSelected(selectedHarvester);
+      }
     }
   }, [map, harvesters, selectedHarvester, prevSelected]);
 
