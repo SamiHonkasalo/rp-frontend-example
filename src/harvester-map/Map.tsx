@@ -25,12 +25,6 @@ const Map: React.FC = () => {
   const { harvesters, selectedHarvester, setSelectedHarvester } = harvContext;
   const mapContainer = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  const [oldGeoData, setOldGeoData] = useState<
-    GeoJSON.FeatureCollection<GeoJSON.Point, GeoJSON.GeoJsonProperties>
-  >({
-    type: 'FeatureCollection',
-    features: [],
-  });
   const [prevSelected, setPrevSelected] = useState('');
 
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -57,25 +51,14 @@ const Map: React.FC = () => {
 
   // Update harvester and route data when changed
   useEffect(() => {
-    const handleOldData = (
-      oldData: GeoJSON.FeatureCollection<
-        GeoJSON.Point,
-        GeoJSON.GeoJsonProperties
-      >
-    ) => {
-      setOldGeoData(oldData);
-    };
     if (map) {
       updateHarvesterData({
         map,
         harvesters,
-        oldGeoData,
-        setOldDataCb: handleOldData,
       });
       updateHarvesterRoutes({ map, harvesters });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [harvesters, map, updateHarvesterData]);
+  }, [harvesters, map, updateHarvesterData, updateHarvesterRoutes]);
 
   // Fly to selected harvester when selection/location changes
   useEffect(() => {
