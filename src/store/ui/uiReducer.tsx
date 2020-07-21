@@ -45,11 +45,13 @@ const uiReducer = (state: UIState, action: UIActions) => {
         sideDrawerTransitioned: state.sideDrawerOpen,
       };
     case UITypes.SET_DARK_THEME:
+      localStorage.setItem('themeMode', 'dark');
       return {
         ...state,
         themeMode: true,
       };
     case UITypes.SET_LIGHT_THEME:
+      localStorage.setItem('themeMode', 'light');
       return {
         ...state,
         themeMode: false,
