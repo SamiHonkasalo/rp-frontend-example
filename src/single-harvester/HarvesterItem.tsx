@@ -53,7 +53,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
   };
 
   const onSubmit = (data: FormInputs) => {
-    console.log('submit');
+    console.log('submit form data');
     console.log(data);
   };
 

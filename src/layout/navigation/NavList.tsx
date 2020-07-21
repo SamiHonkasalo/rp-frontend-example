@@ -16,7 +16,7 @@ const NavList: React.FC = () => {
       ) : (
         <LogoutButton handleLogout={logout} username={username} />
       )}
-      <NavItem to="/" icon={<DashboardIcon />} primaryText="Dashboard" />
+      <NavItem to="/" icon={<DashboardIcon />} primaryText="Harvester map" />
       <NavItem
         to="/harvesters"
         icon={<AssignmentIcon />}

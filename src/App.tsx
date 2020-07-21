@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Layout from './layout/Layout';
-import Dashboard from './dashboard/Dashboard';
+import MapContainer from './harvester-map/MapContainer';
 import LayoutWrapper from './layout/LayoutWrapper';
 import HarvesterList from './harvester-list/HarvesterList';
 import SingleHarvester from './single-harvester/SingleHarvester';
@@ -18,7 +18,7 @@ function App() {
               <Login />
             </Route>
             <Route path="/" exact>
-              <Dashboard />
+              <MapContainer />
             </Route>
             <Route path="/harvesters" exact>
               <HarvesterList />
