@@ -4,6 +4,7 @@ type HarvesterType = {
   oilLevel: number;
   oilLimit: number;
   location: LocationType;
+  region: string;
   route: LocationType[];
   oilLevelHistory: OilLevelHistoryType[];
 };

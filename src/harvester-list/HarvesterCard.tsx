@@ -54,10 +54,12 @@ const HarvesterCard = ({
       <CardContent className={classes.cardContent}>
         <span className={classes.cardContentRow}>Name: {harvester.name}</span>
         <span className={classes.cardContentRow}>
-          Location: lat: {harvester.location.lat.toFixed(4)} lng:{' '}
-          {harvester.location.lng.toFixed(4)}
+          Location: lng: {harvester.location.lng.toFixed(4)} lat:{' '}
+          {harvester.location.lat.toFixed(4)}
         </span>
-        <span className={classes.cardContentRow}>Region: Unknown region</span>
+        <span className={classes.cardContentRow}>
+          Region: {harvester.region}
+        </span>
         <span className={classes.cardContentRow}>
           Oil level: {harvester.oilLevel} %
         </span>

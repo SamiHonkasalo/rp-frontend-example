@@ -46,35 +46,37 @@ const HarvesterTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {harvesters.map((h) => (
-            <TableRow
-              key={h.id}
-              hover
-              onClick={(event) => handleRowClick(event, h.id)}
-              className={classes.tableRow}
-            >
-              <TableCell component="th" scope="row">
-                {h.id}
-              </TableCell>
-              <TableCell>{h.name}</TableCell>
-              <TableCell>
-                lat: {h.location.lat.toFixed(4)} lng:{' '}
-                {h.location.lng.toFixed(4)}
-              </TableCell>
-              <TableCell>Unknown region</TableCell>
-              <TableCell>{h.oilLevel} %</TableCell>
-              <TableCell>
-                <IconButton
-                  title="Show on map"
-                  aria-label="show on map"
-                  onClick={() => handleButtonClick(h.id)}
-                  color="secondary"
-                >
-                  <MapIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {harvesters.map((h) => {
+            return (
+              <TableRow
+                key={h.id}
+                hover
+                onClick={(event) => handleRowClick(event, h.id)}
+                className={classes.tableRow}
+              >
+                <TableCell component="th" scope="row">
+                  {h.id}
+                </TableCell>
+                <TableCell>{h.name}</TableCell>
+                <TableCell>
+                  lng: {h.location.lng.toFixed(4)} lat:{' '}
+                  {h.location.lat.toFixed(4)}
+                </TableCell>
+                <TableCell>{h.region}</TableCell>
+                <TableCell>{h.oilLevel} %</TableCell>
+                <TableCell>
+                  <IconButton
+                    title="Show on map"
+                    aria-label="show on map"
+                    onClick={() => handleButtonClick(h.id)}
+                    color="secondary"
+                  >
+                    <MapIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

@@ -106,8 +106,8 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 harvester={harvester}
+                name="region"
                 label="Region"
-                defaultValue="Unknown region"
                 type="text"
               />
             </Grid>
