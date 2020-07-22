@@ -8,6 +8,7 @@ import { HarvesterContext } from '../store/harvester/harvesterContext';
 import HarvesterItem from './HarvesterItem';
 import HarvesterGraph from './HarvesterGraph';
 import useHttpClient from '../utils/hooks/useHttpClient';
+import useNotification from '../utils/hooks/useNotification';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,9 +27,12 @@ const SingleHarvester = () => {
   const { id } = useParams();
   const harvContext = useContext(HarvesterContext);
   const { harvesters, setSelectedHarvester } = harvContext;
-  const { sendRequest } = useHttpClient();
-  const [harvesterData, setHarvesterData] = useState<HarvesterType>();
+  const { sendRequest, loading } = useHttpClient();
+  const [regionData, setRegionData] = useState<HarvesterType['region']>(
+    'Unknown region'
+  );
   const [fetchDone, setFetchDone] = useState(false);
+  const notify = useNotification();
 
   const SEL_HARV = harvesters.find((h) => h.id === id);
 
@@ -39,7 +43,7 @@ const SingleHarvester = () => {
         const res = await sendRequest({
           url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${
             location.lng
-          },${location.lat}.json/?accesss_token=${
+          },${location.lat}.json/?access_token=${
             process.env.REACT_APP_MAP_API_KEY || ''
           }`,
         });
@@ -59,19 +63,20 @@ const SingleHarvester = () => {
           });
         }
         if (SEL_HARV) {
-          setHarvesterData({ ...SEL_HARV, region });
+          setRegionData(region);
         }
       } catch (e) {
-        if (SEL_HARV) {
-          setHarvesterData({ ...SEL_HARV });
-        }
+        notify({
+          message: `Error retrieving harvester region data: ${e.message}`,
+          type: 'error',
+        });
       }
     }
     if (SEL_HARV && !fetchDone) {
       getHarvesterLocation(SEL_HARV.location);
       setFetchDone(true);
     }
-  }, [SEL_HARV, fetchDone, harvesterData, sendRequest]);
+  }, [SEL_HARV, fetchDone, notify, sendRequest]);
 
   const handleButtonClick = (harvId: string) => {
     setSelectedHarvester(harvId);
@@ -80,16 +85,17 @@ const SingleHarvester = () => {
 
   return (
     <div className={classes.container}>
-      {harvesterData ? (
+      {SEL_HARV ? (
         <Grid container justify="center" spacing={4}>
           <Grid item xs={12} md={8}>
             <HarvesterItem
-              harvester={harvesterData}
+              loading={loading}
+              harvester={{ ...SEL_HARV, region: regionData }}
               handleButtonClick={handleButtonClick}
             />
           </Grid>
           <Grid item xs={12} md={8}>
-            <HarvesterGraph harvester={harvesterData} />
+            <HarvesterGraph harvester={{ ...SEL_HARV, region: regionData }} />
           </Grid>
         </Grid>
       ) : (

@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import useNotification from './useNotification';
 
 interface RequestParams {
   url: string;
@@ -19,8 +18,6 @@ interface UseHttpClient {
 export default function useHttpClient(): UseHttpClient {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>();
-
-  const notify = useNotification();
 
   const activeRequests = useRef<AbortController[]>([]);
 
@@ -55,11 +52,10 @@ export default function useHttpClient(): UseHttpClient {
       } catch (e) {
         setLoading(false);
         setError(e.message);
-        notify({ message: e.message, type: 'error' });
         throw e;
       }
     },
-    [notify]
+    []
   );
 
   const clearError = () => {

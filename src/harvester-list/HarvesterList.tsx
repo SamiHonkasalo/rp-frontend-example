@@ -8,6 +8,7 @@ import { HarvesterContext } from '../store/harvester/harvesterContext';
 import HarvesterTable from './HarvesterTable';
 import HarvesterCards from './HarvesterCards';
 import useHttpClient from '../utils/hooks/useHttpClient';
+import useNotification from '../utils/hooks/useNotification';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,15 +26,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export type RegionData = {
+  id: HarvesterType['id'];
+  region: HarvesterType['region'];
+};
+
 const HarvesterList = () => {
   const classes = useStyles();
   const history = useHistory();
   const harvContext = useContext(HarvesterContext);
   const { harvesters, setSelectedHarvester } = harvContext;
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-  const { sendRequest } = useHttpClient();
-  const [harvesterData, setHarvesterData] = useState<HarvesterType[]>([]);
+  const { sendRequest, loading } = useHttpClient();
+  const [regionData, setRegionData] = useState<RegionData[]>([]);
   const [fetchDone, setFetchDone] = useState(false);
+  const notify = useNotification();
 
   // Get harvesters regional data on mount
   useEffect(() => {
@@ -51,6 +58,10 @@ const HarvesterList = () => {
         });
         return { id, data: res };
       } catch (e) {
+        notify({
+          message: `Error retrieving harvester ${id} region data: ${e.message}`,
+          type: 'error',
+        });
         return { id, data: null };
       }
     }
@@ -63,7 +74,7 @@ const HarvesterList = () => {
       });
       setFetchDone(true);
       Promise.all(harvesterPromises).then((data) => {
-        const allHarvesters = [] as HarvesterType[];
+        const allRegionDatas = [] as RegionData[];
         // Find the correct harvester
         data.forEach((d) => {
           // Find the region data
@@ -77,18 +88,21 @@ const HarvesterList = () => {
           ) {
             const { features } = d.data;
             features.forEach((f: any) => {
-              if (typeof f.id === 'string' && f.id.includes('region')) {
+              if (
+                typeof f.id === 'string' &&
+                f.id.includes('region') &&
+                typeof f?.place_name === 'string'
+              ) {
                 region = f?.place_name || 'Unknown region';
               }
             });
           }
-          const harv = harvesters.find((h) => h.id === d.id);
-          if (harv) allHarvesters.push({ ...harv, region });
+          allRegionDatas.push({ id: d.id, region });
         });
-        setHarvesterData(allHarvesters);
+        setRegionData(allRegionDatas);
       });
     }
-  }, [sendRequest, harvesters, fetchDone]);
+  }, [sendRequest, harvesters, fetchDone, notify]);
 
   const handleItemClick = (event: React.MouseEvent<unknown>, id: string) => {
     // Do not redirect if the button has been clicked
@@ -107,17 +121,25 @@ const HarvesterList = () => {
     history.push('/');
   };
 
+  // Attach the correct regiondata to each harvester
+  const finalHarvesters = harvesters.map((h) => {
+    const region =
+      regionData.find((r) => r.id === h.id)?.region || 'Unknown region';
+    return { ...h, region };
+  });
   return (
     <div className={classes.container}>
       {isSmall ? (
         <HarvesterCards
-          harvesters={harvesterData}
+          loading={loading}
+          harvesters={finalHarvesters}
           handleCardClick={handleItemClick}
           handleButtonClick={handleButtonClick}
         />
       ) : (
         <HarvesterTable
-          harvesters={harvesterData}
+          loading={loading}
+          harvesters={finalHarvesters}
           handleRowClick={handleItemClick}
           handleButtonClick={handleButtonClick}
         />

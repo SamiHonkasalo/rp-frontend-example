@@ -9,6 +9,7 @@ import {
   CardContent,
   Grid,
   CardActions,
+  LinearProgress,
 } from '@material-ui/core';
 import MapIcon from '@material-ui/icons/Map';
 import EditIcon from '@material-ui/icons/Edit';
@@ -30,13 +31,14 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   harvester: HarvesterType;
   handleButtonClick: (id: string) => void;
+  loading: boolean;
 }
 
 interface FormInputs {
   oilLimit: number;
 }
 
-const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
+const HarvesterItem = ({ harvester, handleButtonClick, loading }: Props) => {
   const { register, handleSubmit, errors, reset } = useForm<FormInputs>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -92,7 +94,7 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
       />
       <CardContent>
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
+          <Grid container spacing={5}>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField
                 harvester={harvester}
@@ -104,12 +106,18 @@ const HarvesterItem = ({ harvester, handleButtonClick }: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
-              <HarvesterField
-                harvester={harvester}
-                name="region"
-                label="Region"
-                type="text"
-              />
+              {loading ? (
+                <Grid container alignItems="center" style={{ height: '100%' }}>
+                  <LinearProgress style={{ width: '100%' }} />
+                </Grid>
+              ) : (
+                <HarvesterField
+                  harvester={harvester}
+                  name="region"
+                  label="Region"
+                  type="text"
+                />
+              )}
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
               <HarvesterField

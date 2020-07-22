@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
   IconButton,
+  LinearProgress,
 } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import MapIcon from '@material-ui/icons/Map';
@@ -22,12 +23,14 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   harvesters: HarvesterType[];
+  loading: boolean;
   handleRowClick: (event: React.MouseEvent<unknown>, id: string) => void;
   handleButtonClick: (id: string) => void;
 }
 
 const HarvesterTable = ({
   harvesters,
+  loading,
   handleRowClick,
   handleButtonClick,
 }: Props) => {
@@ -62,7 +65,7 @@ const HarvesterTable = ({
                   lng: {h.location.lng.toFixed(4)} lat:{' '}
                   {h.location.lat.toFixed(4)}
                 </TableCell>
-                <TableCell>{h.region}</TableCell>
+                <TableCell>{loading ? <LinearProgress /> : h.region}</TableCell>
                 <TableCell>{h.oilLevel} %</TableCell>
                 <TableCell>
                   <IconButton
