@@ -101,8 +101,9 @@ const Map: React.FC = () => {
           'text-color',
           themeMode ? '#fff' : '#000'
         );
-        // Add a popup on the map
-        addHarvesterPopup(map);
+        // Add a popup on the map for both normal and error layer
+        addHarvesterPopup(map, 'harvesters');
+        addHarvesterPopup(map, 'harvesters-error');
       });
     }
   }, [map, themeMode]);

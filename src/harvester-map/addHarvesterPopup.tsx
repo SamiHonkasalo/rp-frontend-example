@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 
-const addHarvesterPopup = (map: mapboxgl.Map) => {
+const addHarvesterPopup = (map: mapboxgl.Map, layer: string) => {
   const m = map;
   const popup = new mapboxgl.Popup({
     closeButton: false,
@@ -9,7 +9,7 @@ const addHarvesterPopup = (map: mapboxgl.Map) => {
 
   m.on(
     'mouseenter',
-    'harvesters',
+    layer,
     (
       e: mapboxgl.MapMouseEvent & {
         features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
@@ -34,12 +34,12 @@ const addHarvesterPopup = (map: mapboxgl.Map) => {
         // based on the feature found.
         popup
           .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
-          .setHTML(`<h2 style="color:#000;" >${description}</h2>`)
+          .setHTML(description)
           .addTo(m);
       }
     }
   );
-  m.on('mouseleave', 'harvesters', () => {
+  m.on('mouseleave', layer, () => {
     m.getCanvas().style.cursor = '';
     popup.remove();
   });

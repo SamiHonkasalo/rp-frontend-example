@@ -4,7 +4,7 @@ const HARVESTER_DATA: HarvesterType[] = [
     id: 'h1',
     name: 'Harvester 1',
     region: 'Unknown region',
-    oilLevel: 65.0,
+    oilLevel: 50.0,
     oilLimit: 50.0,
     location: {
       lat: 62.2518079,
@@ -43,7 +43,7 @@ const HARVESTER_DATA: HarvesterType[] = [
     id: 'h4',
     name: 'Harvester 4',
     region: 'Unknown region',
-    oilLevel: 62.4,
+    oilLevel: 49.9,
     oilLimit: 50.0,
     location: {
       lat: 62.9918079,

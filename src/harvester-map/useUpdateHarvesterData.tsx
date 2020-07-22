@@ -38,8 +38,9 @@ const useUpdateHarvesterData = () => {
               properties: {
                 id: h.id,
                 title: h.id,
-                description: h.name,
+                description: `<strong style="color:#000;" >${h.name}</strong><p style="color:#000;" >Oil level: ${h.oilLevel}</p>`,
                 icon: 'rocket',
+                error: h.oilLevel < h.oilLimit,
               },
             });
             // Find the corresponding lines array and harvester feature
