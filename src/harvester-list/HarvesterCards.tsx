@@ -17,9 +17,10 @@ const HarvesterCards: React.FC<Props> = ({
 }: Props) => {
   return (
     <Grid container spacing={3}>
-      {harvesters.map((h) => (
+      {harvesters.map((h, index) => (
         <Grid item xs={12} key={h.id}>
           <HarvesterCard
+            index={index}
             loading={loading}
             harvester={h}
             handleCardClick={handleCardClick}

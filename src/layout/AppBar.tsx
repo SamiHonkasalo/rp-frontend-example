@@ -107,6 +107,7 @@ const AppBar: React.FC = () => {
           color="inherit"
           noWrap
           className={classes.title}
+          id="app-title"
         >
           Recruitment Project
         </Typography>

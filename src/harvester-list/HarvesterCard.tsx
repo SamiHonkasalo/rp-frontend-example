@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   harvester: HarvesterType;
+  index: number;
   loading: boolean;
   handleCardClick: (event: React.MouseEvent<unknown>, id: string) => void;
   handleButtonClick: (id: string) => void;
@@ -31,6 +32,7 @@ interface Props {
 
 const HarvesterCard = ({
   harvester,
+  index,
   loading,
   handleCardClick,
   handleButtonClick,
@@ -41,7 +43,7 @@ const HarvesterCard = ({
       <CardHeader
         title={
           <div className={classes.cardTitleContent}>
-            <span>ID: {harvester.id}</span>
+            <span id={`id-${index}`}>ID: {harvester.id}</span>
             <IconButton
               title="Show on map"
               onClick={() => handleButtonClick(harvester.id)}
@@ -54,12 +56,14 @@ const HarvesterCard = ({
         }
       />
       <CardContent className={classes.cardContent}>
-        <span className={classes.cardContentRow}>Name: {harvester.name}</span>
-        <span className={classes.cardContentRow}>
+        <span className={classes.cardContentRow} id={`name-${index}`}>
+          Name: {harvester.name}
+        </span>
+        <span className={classes.cardContentRow} id={`location-${index}`}>
           Location: lng: {harvester.location.lng.toFixed(4)} lat:{' '}
           {harvester.location.lat.toFixed(4)}
         </span>
-        <span className={classes.cardContentRow}>
+        <span className={classes.cardContentRow} id={`region-${index}`}>
           Region:{' '}
           {loading ? (
             <LinearProgress style={{ width: '30%', marginLeft: 5 }} />
@@ -67,7 +71,7 @@ const HarvesterCard = ({
             harvester.region
           )}
         </span>
-        <span className={classes.cardContentRow}>
+        <span className={classes.cardContentRow} id={`oil-level-${index}`}>
           Oil level: {harvester.oilLevel} %
         </span>
       </CardContent>

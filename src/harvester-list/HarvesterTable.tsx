@@ -49,7 +49,7 @@ const HarvesterTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {harvesters.map((h) => {
+          {harvesters.map((h, index) => {
             return (
               <TableRow
                 key={h.id}
@@ -57,16 +57,18 @@ const HarvesterTable = ({
                 onClick={(event) => handleRowClick(event, h.id)}
                 className={classes.tableRow}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" id={`id-${index}`}>
                   {h.id}
                 </TableCell>
-                <TableCell>{h.name}</TableCell>
-                <TableCell>
+                <TableCell id={`name-${index}`}>{h.name}</TableCell>
+                <TableCell id={`location-${index}`}>
                   lng: {h.location.lng.toFixed(4)} lat:{' '}
                   {h.location.lat.toFixed(4)}
                 </TableCell>
-                <TableCell>{loading ? <LinearProgress /> : h.region}</TableCell>
-                <TableCell>{h.oilLevel} %</TableCell>
+                <TableCell id={`region-${index}`}>
+                  {loading ? <LinearProgress /> : h.region}
+                </TableCell>
+                <TableCell id={`oil-level-${index}`}>{h.oilLevel} %</TableCell>
                 <TableCell>
                   <IconButton
                     title="Show on map"
