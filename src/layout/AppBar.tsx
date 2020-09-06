@@ -109,7 +109,7 @@ const AppBar: React.FC = () => {
           className={classes.title}
           id="app-title"
         >
-          Recruitment Project
+          HarvesThem
         </Typography>
         <IconButton color="inherit" onClick={handleThemeSwitch}>
           {themeMode ? <Brightness7Icon /> : <Brightness4Icon />}

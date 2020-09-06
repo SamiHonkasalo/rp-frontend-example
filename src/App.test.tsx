@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders the title', () => {
   const { getByText } = render(<App />);
-  const titleElement = getByText(/Recruitment Project/i);
+  const titleElement = getByText(/HarvesThem/i);
   expect(titleElement).toBeInTheDocument();
 });
